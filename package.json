@@ -1,0 +1,26 @@
+{
+  "name": "turnstile",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/udibagas/turnstile.git"
+  },
+  "author": "udibagas",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/udibagas/turnstile/issues"
+  },
+  "homepage": "https://github.com/udibagas/turnstile#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "mysql2": "^3.9.2",
+    "node-windows": "^1.0.0-beta.8",
+    "sequelize": "^6.37.1",
+    "sequelize-cli": "^6.6.2"
+  }
+}
