@@ -1,0 +1,29 @@
+<h1>Turnstile</h1>
+
+<p>
+  <a class="btn btn-primary" href="#">Tambah Turnstile</a>
+</p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>No.</th>
+      <th>Nama</th>
+      <th>Host</th>
+      <th>Port</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr v-for="({id, name, host, port}, index) in gates" :key="index">
+      <td>{{ index + 1 }}</td>
+      <td>{{ name }}</td>
+      <td>{{ host }}</td>
+      <td>{{ port }}</td>
+      <td>
+        <a class="btn btn-primary btn-sm" href="#">Log</a> |
+        <a class="btn btn-info btn-sm" href="/gate/edit/">Edit</a> |
+        <a class="btn btn-danger btn-sm" href="/gate/edit/">Hapus</a>
+      </td>
+    </tr>
+  </tbody>
+</table>

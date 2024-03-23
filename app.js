@@ -19,6 +19,25 @@ app.use(
 
 app.use(require("./routes"));
 
+app.use((req, res, next, error) => {
+  console.log(error);
+  if (error.name == "SequelizeValidationError") {
+    const errors = {};
+
+    error.errors.forEach((e) => {
+      if (errors[e.field] == undefined) {
+        errors[e.field] = [];
+      }
+
+      errors[e.field].push(e.message);
+    });
+
+    res.render("layout", { view: "gate/_form", gate, error: errors });
+  } else {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 app.listen(port, () => {
   console.log(`App running on port ${3000}`);
 });
