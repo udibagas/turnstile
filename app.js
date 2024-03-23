@@ -1,8 +1,6 @@
 var cookieSession = require("cookie-session");
 const express = require("express");
 const { Gate } = require("./models");
-const { auth } = require("./middlewares/auth.middleware");
-const { login } = require("./controllers/auth.controller");
 const app = express();
 const port = 3000;
 
