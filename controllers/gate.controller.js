@@ -26,7 +26,7 @@ module.exports = {
     }
   },
 
-  async edit(req, req) {
+  async edit(req, res) {
     try {
       const gate = await Gate.findByPk(req.params.id);
       if (!gate) throw new Error("Gate not found");

@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       }, 1000);
     }
 
-    scan(host) {
+    scan() {
       this.socketClient = new Socket();
       const { name, host, port } = this;
 
