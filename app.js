@@ -1,56 +1,31 @@
-require("dotenv").config();
-const { Socket } = require("net");
+var cookieSession = require("cookie-session");
+const express = require("express");
+const { Gate } = require("./models");
+const { auth } = require("./middlewares/auth.middleware");
+const { login } = require("./controllers/auth.controller");
+const app = express();
+const port = 3000;
 
-function reconnect(client, host) {
-  client.removeAllListeners();
-  client.destroy();
+app.set("view engine", "ejs");
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(
+  cookieSession({
+    name: "session",
+    keys: ["a6NJG5s22Xr1rQzZRAS5rycACVCo6WHsuqLPhBtRLd0Jp7ONsrldfeEn7D0oEXoD"],
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+  })
+);
 
-  setTimeout(() => {
-    scan(host);
-  }, 1000);
-}
+app.use(require("./routes"));
 
-function scan(host) {
-  const client = new Socket();
+app.listen(port, () => {
+  console.log(`App running on port ${3000}`);
+});
 
-  client.connect(5000, host, () => {
-    console.log(`${host} is connected`);
-  });
+const scan = async () => {
+  const gates = await Gate.findAll();
+  gates.forEach((gate) => scan(gate));
+};
 
-  client.on("data", (data) => {
-    data = data.toString().slice(1, -1);
-    console.log(data);
-    const number = "";
-
-    try {
-      const ticket = Ticket.findOne({ where: { number } });
-
-      if (!ticket) {
-        return console.log(`Tiket ${number} tidak ditemukan`);
-      }
-
-      if (ticket.status == false) {
-        return console.log(`Tiket ${number} sudah tidak berlaku`);
-      }
-
-      console.log(`Tiket ${number} valid. Turnstile dibuka`);
-      client.write(Buffer.from(`\xA6OUT1ON\xA9`));
-      ticket.update({ status: false });
-    } catch (error) {
-      console.error(error.message);
-    }
-  });
-
-  client.on("error", (error) => {
-    console.error(error.message);
-    reconnect(client, host);
-  });
-
-  client.on("close", () => {
-    console.log(`${host} is disconnected`);
-    reconnect(client, host);
-  });
-}
-
-const gates = process.env.GATES.split(",");
-gates.forEach((gate) => scan(gate));
+scan();
