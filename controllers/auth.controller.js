@@ -2,7 +2,8 @@ const { User } = require("../models");
 
 module.exports = {
   async login(req, res) {
-    res.render("layout", { view: "_login" });
+    const { message } = req.query;
+    res.render("layout", { view: "_login", message });
   },
 
   async doLogin(req, res) {
