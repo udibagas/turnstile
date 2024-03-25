@@ -6,10 +6,10 @@ const router = require("express").Router();
 
 router.get("/login", login);
 router.post("/login", doLogin);
-router.post("/logout", logout);
+router.get("/logout", logout);
 
 router.use(authMiddleware);
 router.get("/", home);
-router.get("/gate", require("./gate.route"));
+router.use("/gate", require("./gate.route"));
 
 module.exports = router;
