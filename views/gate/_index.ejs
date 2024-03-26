@@ -50,10 +50,11 @@
   inputElement.port = document.querySelector("#port");
 
   const modal = new bootstrap.Modal("#formModal");
-  const formTitle = document.querySelector("#formModalLabel");
   const addBtn = document.querySelector("#btn-add");
+  const form = document.querySelector("#gate-form");
 
   function openForm(data) {
+    const formTitle = document.querySelector("#formModalLabel");
     const { id = "", name = "", host = "", port = "" } = data;
     formTitle.innerText = id ? "Edit Gate" : "Tambah Gate";
     inputElement.name.value = name;
@@ -62,11 +63,31 @@
     modal.show();
   }
 
+  function showValidationError(errors) {
+    form.classList.add("was-validated");
+    const validation = {};
+    validation.name = document.querySelector("#name-validation");
+    validation.host = document.querySelector("#host-validation");
+    validation.port = document.querySelector("#port-validation");
+
+    for (let k in validation) {
+      if (errors[k]) {
+        inputElement[k].classList.add("is-invalid");
+        validation[k].innerText = errors[k].join(", ");
+      } else {
+        inputElement[k].classList.add("is-valid");
+        validation[k].innerText = "";
+      }
+    }
+  }
+
+  // ADD
   addBtn.addEventListener("click", (e) => {
     e.preventDefault();
     openForm({});
   });
 
+  // EDIT
   document.querySelectorAll(".btn-edit").forEach((el) => {
     el.addEventListener("click", (e) => {
       e.preventDefault();
@@ -74,18 +95,23 @@
     });
   });
 
+  // DELETE
   document.querySelectorAll(".btn-delete").forEach((el) => {
-    el.addEventListener("click", (e) => {
+    el.addEventListener("click", async (e) => {
       e.preventDefault();
-      const id = el.dataset.id;
+      const { id } = el.dataset;
       if (confirm("Anda yakin akan menghapus gate ini?")) {
-        window.location.href = el.href;
+        try {
+          await fetch(`/gate/${id}`, { method: "DELETE" });
+          window.location.reload();
+        } catch (error) {
+          console.log(error.message);
+        }
       }
     });
   });
 
-  const form = document.querySelector("#gate-form");
-
+  // CREATE
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const { name, host, port } = inputElement;
@@ -104,29 +130,13 @@
       .then(async (res) => {
         if (!res.ok) throw res;
         const { message, data } = await res.json();
-        // TODO: refresh table
-        location.href = `/`;
+        window.location.reload();
       })
       .catch(async (res) => {
         console.log(res);
         if (res.status == 400) {
           const { errors } = await res.json();
-          console.log(errors);
-          form.classList.add("was-validated");
-          const validation = {};
-          validation.name = document.querySelector("#name-validation");
-          validation.host = document.querySelector("#host-validation");
-          validation.port = document.querySelector("#port-validation");
-
-          for (let k in validation) {
-            if (errors[k]) {
-              inputElement[k].classList.add("is-invalid");
-              validation[k].innerText = errors[k].join(", ");
-            } else {
-              inputElement[k].classList.add("is-valid");
-              validation[k].innerText = "";
-            }
-          }
+          showValidationError(errors);
         }
       });
   });

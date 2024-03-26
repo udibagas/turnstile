@@ -11,10 +11,8 @@ const router = require("express").Router();
 
 router
   .get("/", index)
-  .get("/add", add)
   .post("/", create)
-  .get("/edit/:id", edit)
-  .put("/edit:/id", update)
-  .get("/delete/:id", destroy);
+  .put("/:id", update)
+  .delete("/:id", destroy);
 
 module.exports = router;
