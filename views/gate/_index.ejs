@@ -45,6 +45,7 @@
 
 <script>
   const inputElement = {};
+  inputElement.id = document.querySelector("#id");
   inputElement.name = document.querySelector("#name");
   inputElement.host = document.querySelector("#host");
   inputElement.port = document.querySelector("#port");
@@ -57,10 +58,37 @@
     const formTitle = document.querySelector("#formModalLabel");
     const { id = "", name = "", host = "", port = "" } = data;
     formTitle.innerText = id ? "Edit Gate" : "Tambah Gate";
+    inputElement.id.value = id;
     inputElement.name.value = name;
     inputElement.host.value = host;
     inputElement.port.value = port;
     modal.show();
+  }
+
+  function save({ id, name, host, port }) {
+    const url = id ? `/gate/${id}` : "/gate";
+    const method = id ? "PUT" : "POST";
+
+    fetch(url, {
+      method,
+      body: JSON.stringify({ name, host, port }),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    })
+      .then(async (res) => {
+        if (!res.ok) throw res;
+        const { message, data } = await res.json();
+        window.location.reload();
+      })
+      .catch(async (res) => {
+        console.log(res);
+        if (res.status == 400) {
+          const { errors } = await res.json();
+          showValidationError(errors);
+        }
+      });
   }
 
   function showValidationError(errors) {
@@ -111,33 +139,17 @@
     });
   });
 
-  // CREATE
+  // CREATE & UPDATE
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    const { name, host, port } = inputElement;
-    fetch("/gate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        name: name.value,
-        host: host.value,
-        port: port.value,
-      }),
-    })
-      .then(async (res) => {
-        if (!res.ok) throw res;
-        const { message, data } = await res.json();
-        window.location.reload();
-      })
-      .catch(async (res) => {
-        console.log(res);
-        if (res.status == 400) {
-          const { errors } = await res.json();
-          showValidationError(errors);
-        }
-      });
+    const { id, name, host, port } = inputElement;
+    const payload = {
+      id: id.value || null,
+      name: name.value,
+      host: host.value,
+      port: port.value,
+    };
+
+    save(payload);
   });
 </script>
