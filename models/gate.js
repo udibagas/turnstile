@@ -81,8 +81,8 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: true,
         validate: {
-          notNull: { msg: "Nama harus diisi" },
-          notEmpty: { msg: "Nama harus diisi" },
+          notNull: { msg: "Nama gate harus diisi" },
+          notEmpty: { msg: "Nama gate harus diisi" },
         },
       },
       host: {
@@ -90,9 +90,9 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: true,
         validate: {
-          notNull: { msg: "Host harus diisi" },
-          notEmpty: { msg: "Host harus diisi" },
-          isIP: { msg: "Invalid IP Address" },
+          notNull: { msg: "Alamat IP harus diisi" },
+          notEmpty: { msg: "Alamat IP harus diisi" },
+          isIP: { msg: "Alamat IP tidak valid" },
         },
       },
       port: {
