@@ -15,6 +15,6 @@ router
   .post("/", create)
   .get("/edit/:id", edit)
   .put("/edit:/id", update)
-  .delete("/delete/:id", destroy);
+  .get("/delete/:id", destroy);
 
 module.exports = router;

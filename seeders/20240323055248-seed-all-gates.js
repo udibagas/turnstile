@@ -15,10 +15,10 @@ module.exports = {
       return { name, host, port, createdAt, updatedAt };
     });
 
-    await queryInterface.bulkInsert("Gates", data);
+    await queryInterface.bulkInsert("gates", data);
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete("Gates");
+    await queryInterface.bulkDelete("gates");
   },
 };

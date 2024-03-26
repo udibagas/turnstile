@@ -15,7 +15,7 @@ module.exports = {
     res.render("layout", { view: "gate/_form", gate });
   },
 
-  async create(req, res) {
+  async create(req, res, next) {
     const gate = Gate.build(req.body);
 
     try {
@@ -52,7 +52,7 @@ module.exports = {
       const gate = await Gate.findByPk(req.params.id);
       if (!gate) throw new Error("Gate not found");
       await gate.destroy();
-      res.json({ message: "Gate telah dihapus" });
+      res.redirect("/");
     } catch (error) {
       next(error);
     }

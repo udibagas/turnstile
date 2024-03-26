@@ -10,6 +10,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieMiddleware);
 
+app.use((req, res, next) => {
+  app.locals.user = req.session.user;
+  next();
+});
+
 app.use(require("./routes"));
 app.use(errorMiddleware);
 

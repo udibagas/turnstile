@@ -1,1 +1,115 @@
-<form></form>
+<div
+  class="modal fade"
+  id="formModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form id="gate-form">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah Gate</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-outline mb-4">
+            <label for="name" class="form-label">Nama gate</label>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              name="name"
+              required
+            />
+            <div class="invalid-feedback" id="name-validation"></div>
+          </div>
+
+          <div class="form-outline mb-4">
+            <label for="host" class="form-label">Alamat IP</label>
+            <input
+              type="text"
+              class="form-control"
+              id="host"
+              name="host"
+              required
+            />
+            <div class="invalid-feedback" id="host-validation"></div>
+          </div>
+
+          <div class="form-outline mb-4">
+            <label for="port" class="form-label">Port</label>
+            <input
+              type="number"
+              class="form-control"
+              id="port"
+              name="port"
+              required
+            />
+            <div class="invalid-feedback" id="port-validation"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            data-bs-dismiss="modal"
+          >
+            Batal
+          </button>
+          <button class="btn btn-primary" type="submit" id="upload-btn">
+            Simpan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  const form = document.querySelector("#gate-form");
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = document.querySelector("#name").value;
+    const host = document.querySelector("#host").value;
+    const port = document.querySelector("#port").value;
+
+    fetch("/gate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ name, host, port }),
+    })
+      .then(async (res) => {
+        if (!res.ok) throw res;
+        const { message, data } = await res.json();
+        // TODO: refrech table
+        location.href = `/`;
+      })
+      .catch(async (res) => {
+        console.log(res);
+        if (res.status == 400) {
+          const { errors } = await res.json();
+          console.log(errors);
+          form.classList.add("was-validated");
+          const validation = {};
+          validation.name = document.querySelector("#name-validation");
+          validation.host = document.querySelector("#host-validation");
+          validation.port = document.querySelector("#port-validation");
+
+          for (let k in validation) {
+            if (errors[k]) {
+              validation[k].innerText = errors[k].join(",");
+            }
+          }
+        }
+      });
+  });
+</script>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+
+    <style>
+      * {
+        font-size: 0.9rem;
+      }
+    </style>
+    <title>Gate Manager</title>
+  </head>
+  <body>
+    <div
+      style="
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      "
+    >
+      <div class="card shadow" style="width: 350px">
+        <div class="card-body text-center">
+          <form method="post">
+            <h2 class="mt-4 mb-5">Gate Manager</h2>
+
+            <% if (message) { %>
+            <div class="alert alert-danger"><%= message %></div>
+            <% } %>
+
+            <div class="mb-4">
+              <input
+                type="email"
+                class="form-control"
+                name="email"
+                placeholder="Email"
+              />
+            </div>
+            <div class="mb-4">
+              <input
+                type="password"
+                class="form-control"
+                name="password"
+                placeholder="Password"
+              />
+            </div>
+            <button
+              type="submit"
+              class="btn btn-primary mb-4"
+              style="width: 100%"
+            >
+              Login
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

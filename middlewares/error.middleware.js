@@ -4,11 +4,11 @@ module.exports = (error, req, res, next) => {
     const errors = {};
 
     error.errors.forEach((e) => {
-      if (errors[e.field] == undefined) {
-        errors[e.field] = [];
+      if (errors[e.path] == undefined) {
+        errors[e.path] = [];
       }
 
-      errors[e.field].push(e.message);
+      errors[e.path].push(e.message);
     });
 
     res.status(400).json({ message: "Validation error", errors });

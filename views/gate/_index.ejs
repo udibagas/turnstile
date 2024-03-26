@@ -1,8 +1,13 @@
-<h1>Turnstile</h1>
+<h1 class="my-5">Gate</h1>
 
-<p>
-  <a class="btn btn-primary" href="#">Tambah Turnstile</a>
-</p>
+<button
+  type="button"
+  class="btn btn-primary mb-5"
+  data-bs-toggle="modal"
+  data-bs-target="#formModal"
+>
+  Tambah Gate
+</button>
 
 <table class="table">
   <thead>
@@ -11,19 +16,41 @@
       <th>Nama</th>
       <th>Host</th>
       <th>Port</th>
+      <th class="text-center" style="width: 200px">Action</th>
     </tr>
   </thead>
   <tbody>
-    <tr v-for="({id, name, host, port}, index) in gates" :key="index">
-      <td>{{ index + 1 }}</td>
-      <td>{{ name }}</td>
-      <td>{{ host }}</td>
-      <td>{{ port }}</td>
-      <td>
-        <a class="btn btn-primary btn-sm" href="#">Log</a> |
-        <a class="btn btn-info btn-sm" href="/gate/edit/">Edit</a> |
-        <a class="btn btn-danger btn-sm" href="/gate/edit/">Hapus</a>
+    <% gates.forEach(({id, name, host, port,}, index) => { %>
+    <tr>
+      <td><%= index + 1 %></td>
+      <td><%= name %></td>
+      <td><%= host %></td>
+      <td><%= port %></td>
+      <td class="text-center">
+        <a class="btn btn-primary btn-sm" href="/gate/log/<%= id %>">Log</a>
+        <a class="btn btn-info btn-sm" href="/gate/edit/<%= id %>">Edit</a>
+        <a
+          class="btn btn-danger btn-sm btn-delete"
+          data-id="<%= id %>"
+          href="/gate/delete/<%= id %>"
+          >Hapus</a
+        >
       </td>
     </tr>
+    <% }) %>
   </tbody>
 </table>
+
+<%- include('_form') %>
+
+<script>
+  document.querySelectorAll(".btn-delete").forEach((el) => {
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      const id = el.dataset.id;
+      if (confirm("Anda yakin akan menghapus gate ini?")) {
+        window.location.href = el.href;
+      }
+    });
+  });
+</script>

@@ -3,7 +3,7 @@ const { User } = require("../models");
 module.exports = {
   async login(req, res) {
     const { message } = req.query;
-    res.render("layout", { view: "_login", message });
+    res.render("login", { message });
   },
 
   async doLogin(req, res) {
