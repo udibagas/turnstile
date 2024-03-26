@@ -10,9 +10,9 @@ module.exports = {
       ["Gate 4", "192.168.1.153", 5000],
     ].map((el) => {
       const [name, host, port] = el;
-      const createdAt = new Date();
-      const updatedAt = new Date();
-      return { name, host, port, createdAt, updatedAt };
+      const created_at = new Date();
+      const updated_at = new Date();
+      return { name, host, port, created_at, updated_at };
     });
 
     await queryInterface.bulkInsert("gates", data);
