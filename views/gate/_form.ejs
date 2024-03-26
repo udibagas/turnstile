@@ -7,7 +7,7 @@
 >
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <form id="gate-form">
+      <form id="gate-form" novalidate>
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah Gate</h1>
           <button
@@ -72,25 +72,31 @@
 </div>
 
 <script>
+  const inputElement = {};
+  inputElement.name = document.querySelector("#name");
+  inputElement.host = document.querySelector("#host");
+  inputElement.port = document.querySelector("#port");
   const form = document.querySelector("#gate-form");
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    const name = document.querySelector("#name").value;
-    const host = document.querySelector("#host").value;
-    const port = document.querySelector("#port").value;
-
+    const { name, host, port } = inputElement;
     fetch("/gate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify({ name, host, port }),
+      body: JSON.stringify({
+        name: name.value,
+        host: host.value,
+        port: port.value,
+      }),
     })
       .then(async (res) => {
         if (!res.ok) throw res;
         const { message, data } = await res.json();
-        // TODO: refrech table
+        // TODO: refresh table
         location.href = `/`;
       })
       .catch(async (res) => {
@@ -106,7 +112,11 @@
 
           for (let k in validation) {
             if (errors[k]) {
-              validation[k].innerText = errors[k].join(",");
+              inputElement[k].classList.add("is-invalid");
+              validation[k].innerText = errors[k].join(", ");
+            } else {
+              inputElement[k].classList.add("is-valid");
+              validation[k].innerText = "";
             }
           }
         }
