@@ -1,11 +1,6 @@
 <h1 class="my-5">Gate</h1>
 
-<button
-  type="button"
-  class="btn btn-primary mb-5"
-  data-bs-toggle="modal"
-  data-bs-target="#formModal"
->
+<button type="button" class="btn btn-primary mb-5" id="btn-add">
   Tambah Gate
 </button>
 
@@ -55,17 +50,27 @@
   inputElement.port = document.querySelector("#port");
 
   const modal = new bootstrap.Modal("#formModal");
+  const formTitle = document.querySelector("#formModalLabel");
+  const addBtn = document.querySelector("#btn-add");
+
+  function openForm(data) {
+    const { id = "", name = "", host = "", port = "" } = data;
+    formTitle.innerText = id ? "Edit Gate" : "Tambah Gate";
+    inputElement.name.value = name;
+    inputElement.host.value = host;
+    inputElement.port.value = port;
+    modal.show();
+  }
+
+  addBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    openForm({});
+  });
+
   document.querySelectorAll(".btn-edit").forEach((el) => {
     el.addEventListener("click", (e) => {
       e.preventDefault();
-      const id = el.dataset.id;
-      const name = el.dataset.name;
-      const host = el.dataset.host;
-      const port = el.dataset.port;
-      inputElement.name.value = name;
-      inputElement.host.value = host;
-      inputElement.port.value = port;
-      modal.show();
+      openForm(el.dataset);
     });
   });
 
