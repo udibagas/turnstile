@@ -7,6 +7,7 @@ module.exports = {
     database: "turnstile",
     host: "127.0.0.1",
     dialect: "mysql",
+    logging: false,
   },
   test: {
     username: "root",
@@ -14,6 +15,7 @@ module.exports = {
     database: "database_test",
     host: "127.0.0.1",
     dialect: "mysql",
+    logging: false,
   },
   production: {
     username: DB_USER,
@@ -22,5 +24,6 @@ module.exports = {
     host: DB_HOST || "127.0.0.1",
     port: DB_PORT || 3306,
     dialect: "mysql",
+    logging: false,
   },
 };
