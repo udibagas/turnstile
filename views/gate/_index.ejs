@@ -28,11 +28,16 @@
       <td><%= port %></td>
       <td class="text-center">
         <a class="btn btn-primary btn-sm" href="/gate/log/<%= id %>">Log</a>
-        <a class="btn btn-info btn-sm" href="/gate/edit/<%= id %>">Edit</a>
         <a
-          class="btn btn-danger btn-sm btn-delete"
+          class="btn btn-info btn-sm btn-edit"
           data-id="<%= id %>"
-          href="/gate/delete/<%= id %>"
+          data-name="<%= name %>"
+          data-host="<%= host %>"
+          data-port="<%= port  %>"
+          href="#"
+          >Edit</a
+        >
+        <a class="btn btn-danger btn-sm btn-delete" data-id="<%= id %>" href="#"
           >Hapus</a
         >
       </td>
@@ -44,6 +49,26 @@
 <%- include('_form') %>
 
 <script>
+  const inputElement = {};
+  inputElement.name = document.querySelector("#name");
+  inputElement.host = document.querySelector("#host");
+  inputElement.port = document.querySelector("#port");
+
+  const modal = new bootstrap.Modal("#formModal");
+  document.querySelectorAll(".btn-edit").forEach((el) => {
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      const id = el.dataset.id;
+      const name = el.dataset.name;
+      const host = el.dataset.host;
+      const port = el.dataset.port;
+      inputElement.name.value = name;
+      inputElement.host.value = host;
+      inputElement.port.value = port;
+      modal.show();
+    });
+  });
+
   document.querySelectorAll(".btn-delete").forEach((el) => {
     el.addEventListener("click", (e) => {
       e.preventDefault();
@@ -52,5 +77,52 @@
         window.location.href = el.href;
       }
     });
+  });
+
+  const form = document.querySelector("#gate-form");
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const { name, host, port } = inputElement;
+    fetch("/gate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        name: name.value,
+        host: host.value,
+        port: port.value,
+      }),
+    })
+      .then(async (res) => {
+        if (!res.ok) throw res;
+        const { message, data } = await res.json();
+        // TODO: refresh table
+        location.href = `/`;
+      })
+      .catch(async (res) => {
+        console.log(res);
+        if (res.status == 400) {
+          const { errors } = await res.json();
+          console.log(errors);
+          form.classList.add("was-validated");
+          const validation = {};
+          validation.name = document.querySelector("#name-validation");
+          validation.host = document.querySelector("#host-validation");
+          validation.port = document.querySelector("#port-validation");
+
+          for (let k in validation) {
+            if (errors[k]) {
+              inputElement[k].classList.add("is-invalid");
+              validation[k].innerText = errors[k].join(", ");
+            } else {
+              inputElement[k].classList.add("is-valid");
+              validation[k].innerText = "";
+            }
+          }
+        }
+      });
   });
 </script>
