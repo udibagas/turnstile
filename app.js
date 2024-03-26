@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const errorMiddleware = require("./middlewares/error.middleware");
 const cookieMiddleware = require("./middlewares/cookie.middleware");
