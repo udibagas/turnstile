@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       this.socketClient.destroy();
 
       setTimeout(() => {
-        this.scan(this.host);
+        this.scan();
       }, 1000);
     }
 
@@ -64,7 +64,7 @@ module.exports = (sequelize, DataTypes) => {
 
       this.socketClient.on("error", (error) => {
         console.error(error.message);
-        this.reconnect(client, host);
+        this.reconnect();
       });
 
       this.socketClient.on("close", () => {
