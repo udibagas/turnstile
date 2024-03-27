@@ -112,5 +112,13 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
+  Gate.afterSave((gate) => {
+    gate.reconnect();
+  });
+
+  Gate.afterDestroy((gate) => {
+    gate.socketClient.destroy();
+  });
+
   return Gate;
 };
