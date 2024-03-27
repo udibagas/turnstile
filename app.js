@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const { Gate } = require("./models");
 const errorMiddleware = require("./middlewares/error.middleware");
 const cookieMiddleware = require("./middlewares/cookie.middleware");
 const app = express();
@@ -22,3 +23,10 @@ app.use(errorMiddleware);
 app.listen(port, () => {
   console.log(`App running on port ${3000}`);
 });
+
+const scan = async () => {
+  const gates = await Gate.findAll();
+  gates.forEach((gate) => gate.scan());
+};
+
+scan();
