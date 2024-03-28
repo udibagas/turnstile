@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       this.socketClient.on("data", async (bufferData) => {
-        data = bufferData.toString().slice(1, -1);
+        const data = bufferData.toString().slice(1, -1);
         console.log(data);
 
         const prefix = data.slice(0, 2);
