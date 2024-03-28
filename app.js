@@ -26,7 +26,13 @@ app.listen(port, () => {
 
 const scan = async () => {
   const gates = await Gate.findAll();
-  gates.forEach((gate) => gate.scan());
+  gates.forEach((gate) => {
+    try {
+      gate.scan();
+    } catch (error) {
+      console.log(error.message);
+    }
+  });
 };
 
 scan();

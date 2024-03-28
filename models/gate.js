@@ -11,7 +11,11 @@ module.exports = (sequelize, DataTypes) => {
       this.socketClient.destroy();
 
       setTimeout(() => {
-        this.scan();
+        try {
+          this.scan();
+        } catch (error) {
+          console.log(error.message);
+        }
       }, 1000);
     }
 
@@ -57,8 +61,8 @@ module.exports = (sequelize, DataTypes) => {
         }
       });
 
-      this.socketClient.on("close", () => {
-        console.log(`${name}: DICONNECTED`);
+      this.socketClient.on("error", (error) => {
+        console.log(`${name}: ${error.message}`);
         this.reconnect();
       });
     }
