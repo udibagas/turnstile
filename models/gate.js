@@ -58,17 +58,17 @@ module.exports = (sequelize, DataTypes) => {
             gate_id: this.id,
           });
         } catch (error) {
-          console.error(error.message);
+          console.log(`${name}: ${error.message}`);
         }
       });
 
       this.socketClient.on("error", (error) => {
-        console.error(error.message);
+        console.log(`${name}: ${error.message}`);
         this.reconnect();
       });
 
       this.socketClient.on("close", () => {
-        console.log(`${host} is disconnected`);
+        console.log(`${name} is disconnected`);
         this.reconnect();
       });
     }
