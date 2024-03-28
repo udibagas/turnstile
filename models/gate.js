@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
         const code = data.slice(2);
 
         try {
-          const ticket = sequelize.models.Ticket.findByCode(code);
+          const ticket = await sequelize.models.Ticket.findByCode(code);
 
           if (!ticket) {
             return console.log(`${name}: Tiket ${code} tidak ditemukan`);
