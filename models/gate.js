@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
           }
 
           console.log(`${name}: Tiket ${code} valid. Turnstile dibuka`);
-          client.write(Buffer.from(`\xA6OUT1ON\xA9`));
+          this.socketClient.write(Buffer.from(`\xA6OUT1ON\xA9`));
           await ticket.update({
             ticket_status: "used",
             date_used: new Date(),
