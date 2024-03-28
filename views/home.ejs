@@ -5,16 +5,20 @@
 
 <script>
   const logContainer = document.querySelector("#log");
-  const fetchLog = fetch("/log", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-  });
+
+  const fetchLog = (time) => {
+    return fetch(`/log?time=${time}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+  };
 
   setInterval(() => {
-    fetchLog
+    const time = Date.now();
+    fetchLog(time)
       .then((res) => {
         return res.clone().json();
       })
