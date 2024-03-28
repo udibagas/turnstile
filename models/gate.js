@@ -19,20 +19,15 @@ module.exports = (sequelize, DataTypes) => {
       this.socketClient = new Socket();
       const { name, host, port } = this;
 
-      this.socketClient.connect(5000, host, () => {
-        console.log(`${name} (${host}:${port}) is connected`);
+      this.socketClient.connect(port, host, () => {
+        console.log(`${name}: CONNECTED`);
       });
 
       this.socketClient.on("data", async (bufferData) => {
         const data = bufferData.toString().slice(1, -1);
-        console.log(data);
-
+        console.log(`${name}: ${data}`);
         const prefix = data.slice(0, 2);
-
-        if (!["PT", "QT"].includes(prefix)) {
-          return;
-        }
-
+        if (!["PT", "QT"].includes(prefix)) return;
         const code = data.slice(2);
 
         try {
@@ -68,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       this.socketClient.on("close", () => {
-        console.log(`${name} is disconnected`);
+        console.log(`${name}: DICONNECTED`);
         this.reconnect();
       });
     }
