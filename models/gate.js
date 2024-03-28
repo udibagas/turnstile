@@ -68,12 +68,6 @@ module.exports = (sequelize, DataTypes) => {
         console.log(`${name}: ${error.message}`);
         this.reconnect();
       });
-
-      this.socketClient.on("timeout", () => {
-        console.log(`${name}: TIMEOUT`);
-        this.socketClient.end();
-        this.reconnect();
-      });
     }
   }
 
