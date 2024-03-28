@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
 
     scan() {
       this.socketClient = new Socket();
-      // this.socketClient.setTimeout(3000);
+      this.socketClient.setKeepAlive(true, 5000);
       const { name, host, port } = this;
 
       this.socketClient.connect(port, host, () => {
