@@ -112,10 +112,16 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  Gate.afterSave((gate) => {
-    gate.reconnect();
+  Gate.afterCreate((gate) => {
+    gate.scan();
   });
 
+  // kalau ada perubahan ip atau port scan ulang
+  Gate.afterUpdate((gate) => {
+    gate.scan();
+  });
+
+  // ga bisa seperti ini harusnya. karena beda instance
   Gate.afterDestroy((gate) => {
     gate.socketClient.destroy();
   });
