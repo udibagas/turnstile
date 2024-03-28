@@ -7,8 +7,10 @@ module.exports = (sequelize, DataTypes) => {
     socketClient;
 
     reconnect() {
-      this.socketClient.removeAllListeners();
-      this.socketClient.destroy();
+      if (this.socketClient instanceof Socket) {
+        this.socketClient.removeAllListeners();
+        this.socketClient.destroy();
+      }
 
       setTimeout(() => {
         try {
@@ -21,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
 
     scan() {
       this.socketClient = new Socket();
+      this.socketClient.setTimeout(1000);
       const { name, host, port } = this;
 
       this.socketClient.connect(port, host, () => {
@@ -63,6 +66,12 @@ module.exports = (sequelize, DataTypes) => {
 
       this.socketClient.on("error", (error) => {
         console.log(`${name}: ${error.message}`);
+        this.reconnect();
+      });
+
+      this.socketClient.on("timeout", () => {
+        console.log(`${name}: TIMEOUT`);
+        this.socketClient.end();
         this.reconnect();
       });
     }
