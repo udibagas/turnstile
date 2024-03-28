@@ -23,6 +23,12 @@
       <td><%= port %></td>
       <td class="text-center">
         <a
+          class="btn btn-info btn-sm btn-reconnect"
+          data-id="<%= id %>"
+          href="#"
+          >Reconnect</a
+        >
+        <a
           class="btn btn-info btn-sm btn-edit"
           data-id="<%= id %>"
           data-name="<%= name %>"
@@ -150,5 +156,26 @@
     };
 
     save(payload);
+  });
+
+  // RECONNECT
+  document.querySelectorAll(".btn-reconnect").forEach((el) => {
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      fetch(`/gate/reconnect/${el.dataset.id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((json) => {
+          alert(json.message);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
   });
 </script>

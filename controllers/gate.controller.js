@@ -42,4 +42,15 @@ module.exports = {
       next(error);
     }
   },
+
+  async reconnect(req, res) {
+    try {
+      const gate = await Gate.findByPk(req.params.id);
+      if (!gate) throw new Error("Gate not found");
+      gate.scan();
+      res.json({ message: "Gate dihubungkan kembali" });
+    } catch (error) {
+      next(error);
+    }
+  },
 };
