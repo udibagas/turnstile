@@ -1,1 +1,27 @@
-<div class="container"><%- include('gate/_index') %></div>
+<div class="container d-flex justify-content-between">
+  <div class="flex-grow-1"><%- include('gate/_index') %></div>
+  <div class="flex-grow-1 log" id="log"></div>
+</div>
+
+<script>
+  const logContainer = document.querySelector("#log");
+  const fetchLog = fetch("/log", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+  });
+
+  setInterval(() => {
+    fetchLog
+      .then((res) => res.json())
+      .then((log) => {
+        logContainer.innerHTML = log.logs.map((e) => `> ${e}`).join("<br />");
+      })
+      .catch((err) => {
+        console.log(err.message);
+        // logContainer.textContent = err.message;
+      });
+  }, 300);
+</script>

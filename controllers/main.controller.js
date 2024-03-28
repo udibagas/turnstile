@@ -1,3 +1,4 @@
+const { getLastLog } = require("../lib/log");
 const { Gate } = require("../models");
 
 module.exports = {
@@ -8,6 +9,15 @@ module.exports = {
     } catch (error) {
       res.send(error.message);
       console.log(error);
+    }
+  },
+
+  async log(req, res) {
+    try {
+      const logs = await getLastLog("./daemon/turnstileapp.out.log", 50);
+      res.json({ logs });
+    } catch (error) {
+      res.send(error.message);
     }
   },
 };
