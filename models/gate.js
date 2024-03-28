@@ -57,27 +57,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       });
 
-      this.socketClient.on("error", (error) => {
-        console.log(`${name}: ${error.message}`);
-        this.reconnect();
-      });
-
       this.socketClient.on("close", () => {
-        console.log(`${name}: DICONNECTED`);
-        this.reconnect();
-      });
-
-      this.socketClient.on("timeout", () => {
-        console.log(`${name}: DICONNECTED`);
-        this.reconnect();
-      });
-
-      this.socketClient.on("connectionAttemptFailed", () => {
-        console.log(`${name}: DICONNECTED`);
-        this.reconnect();
-      });
-
-      this.socketClient.on("connectionAttemptTimeout", () => {
         console.log(`${name}: DICONNECTED`);
         this.reconnect();
       });
