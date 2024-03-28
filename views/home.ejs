@@ -15,13 +15,14 @@
 
   setInterval(() => {
     fetchLog
-      .then((res) => res.json())
+      .then((res) => {
+        return res.clone().json();
+      })
       .then((log) => {
         logContainer.innerHTML = log.logs.map((e) => `> ${e}`).join("<br />");
       })
       .catch((err) => {
         console.log(err.message);
-        // logContainer.textContent = err.message;
       });
   }, 300);
 </script>
