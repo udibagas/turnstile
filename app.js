@@ -29,4 +29,4 @@ const scan = async () => {
   gates.forEach((gate) => gate.scan());
 };
 
-// scan();
+scan();
