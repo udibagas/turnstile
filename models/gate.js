@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         try {
           this.scan();
         } catch (error) {
-          console.log(error.message);
+          console.log(`${this.name} - ERROR - ${error.message}`);
         }
       }, 1000);
     }
@@ -27,12 +27,12 @@ module.exports = (sequelize, DataTypes) => {
       const { name, host, port } = this;
 
       this.socketClient.connect(port, host, () => {
-        console.log(`${name}: CONNECTED`);
+        console.log(`${name} - CONNECTED`);
       });
 
       this.socketClient.on("data", async (bufferData) => {
         const data = bufferData.toString().slice(1, -1);
-        console.log(`${name}: ${data}`);
+        // console.log(`${name}: ${data}`);
         const prefix = data.slice(0, 2);
         if (!["PT", "QT"].includes(prefix)) return;
         const code = data.slice(2);
@@ -41,18 +41,18 @@ module.exports = (sequelize, DataTypes) => {
           const ticket = await sequelize.models.Ticket.findByCode(code);
 
           if (!ticket) {
-            return console.log(`${name}: Tiket ${code} tidak ditemukan`);
+            return console.log(`${name} - INVALID - ${code}`);
           }
 
           if (ticket.ticket_status == "used") {
-            return console.log(`${name}: Tiket ${code} sudah digunakan`);
+            return console.log(`${name} - USED - ${code}`);
           }
 
           if (ticket.ticket_status == "refund") {
-            return console.log(`${name}: Tiket ${code} sudah direfund`);
+            return console.log(`${name} - REFUND - ${code}`);
           }
 
-          console.log(`${name}: Tiket ${code} valid. Turnstile dibuka`);
+          console.log(`${name} - OK - ${code}`);
           this.socketClient.write(Buffer.from(`\xA6TRIG1\xA9`));
           await ticket.update({
             ticket_status: "used",
@@ -60,12 +60,12 @@ module.exports = (sequelize, DataTypes) => {
             gate_id: this.id,
           });
         } catch (error) {
-          console.log(`${name}: ${error.message}`);
+          console.log(`${name} - ERROR - ${error.message}`);
         }
       });
 
       this.socketClient.on("error", (error) => {
-        console.log(`${name}: ${error.message}`);
+        console.log(`${name} - ERROR - ${error.message}`);
         this.reconnect();
       });
     }
