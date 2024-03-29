@@ -22,12 +22,6 @@
       <td><%= host %></td>
       <td><%= port %></td>
       <td class="text-center">
-        <!-- <a
-          class="btn btn-success btn-sm btn-reconnect"
-          data-id="<%= id %>"
-          href="#"
-          >Reconnect</a
-        > -->
         <a
           class="btn btn-info btn-sm btn-edit"
           data-id="<%= id %>"
@@ -35,11 +29,16 @@
           data-host="<%= host %>"
           data-port="<%= port  %>"
           href="#"
-          >Edit</a
         >
-        <a class="btn btn-danger btn-sm btn-delete" data-id="<%= id %>" href="#"
-          >Hapus</a
+          Edit
+        </a>
+        <a
+          class="btn btn-danger btn-sm btn-delete"
+          data-id="<%= id %>"
+          href="#"
         >
+          Hapus
+        </a>
       </td>
     </tr>
     <% }) %>
@@ -156,26 +155,5 @@
     };
 
     save(payload);
-  });
-
-  // RECONNECT
-  document.querySelectorAll(".btn-reconnect").forEach((el) => {
-    el.addEventListener("click", (e) => {
-      e.preventDefault();
-      fetch(`/gate/reconnect/${el.dataset.id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          alert(json.message);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    });
   });
 </script>

@@ -21,7 +21,7 @@ module.exports = {
     }
   },
 
-  async update(req, res) {
+  async update(req, res, next) {
     try {
       const gate = await Gate.findByPk(req.params.id);
       if (!gate) throw new Error("Gate not found");
@@ -32,23 +32,12 @@ module.exports = {
     }
   },
 
-  async destroy(req, res) {
+  async destroy(req, res, next) {
     try {
       const gate = await Gate.findByPk(req.params.id);
       if (!gate) throw new Error("Gate not found");
       await gate.destroy();
       res.json({ message: "Gate telah dihapus" });
-    } catch (error) {
-      next(error);
-    }
-  },
-
-  async reconnect(req, res) {
-    try {
-      const gate = await Gate.findByPk(req.params.id);
-      if (!gate) throw new Error("Gate not found");
-      gate.scan();
-      res.json({ message: "Gate dihubungkan kembali" });
     } catch (error) {
       next(error);
     }

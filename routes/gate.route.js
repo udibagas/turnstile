@@ -12,7 +12,6 @@ router
   .get("/", index)
   .post("/", create)
   .put("/:id", update)
-  .delete("/:id", destroy)
-  .post("/reconnect/:id", reconnect);
+  .delete("/:id", destroy);
 
 module.exports = router;
