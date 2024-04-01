@@ -6,19 +6,25 @@ module.exports = (sequelize, DataTypes) => {
   class Gate extends Model {
     socketClient;
 
-    reconnect() {
-      if (this.socketClient instanceof Socket) {
-        this.socketClient.removeAllListeners();
-        this.socketClient.destroy();
-      }
+    async reconnect() {
+      try {
+        await this.reload();
 
-      setTimeout(() => {
-        try {
-          this.scan();
-        } catch (error) {
-          console.log(`${this.name} - ERROR - ${error.message}`);
+        if (this.socketClient instanceof Socket) {
+          this.socketClient.removeAllListeners();
+          this.socketClient.destroy();
         }
-      }, 1000);
+
+        setTimeout(() => {
+          try {
+            this.scan();
+          } catch (error) {
+            console.log(`${this.name} - ERROR - ${error.message}`);
+          }
+        }, 1000);
+      } catch (error) {
+        console.log(`${this.name} - ERROR - ${error.message}`);
+      }
     }
 
     scan() {
@@ -112,16 +118,6 @@ module.exports = (sequelize, DataTypes) => {
   Gate.afterCreate((gate) => {
     gate.scan();
   });
-
-  // kalau ada perubahan ip atau port scan ulang
-  // Gate.afterUpdate((gate) => {
-  //   gate.scan();
-  // });
-
-  // ga bisa seperti ini harusnya. karena beda instance
-  // Gate.afterDestroy((gate) => {
-  //   gate.socketClient.destroy();
-  // });
 
   return Gate;
 };
