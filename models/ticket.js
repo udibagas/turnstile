@@ -1,6 +1,5 @@
 "use strict";
 const { Model } = require("sequelize");
-const http = require("http");
 
 module.exports = (sequelize, DataTypes) => {
   class Ticket extends Model {
@@ -27,11 +26,6 @@ module.exports = (sequelize, DataTypes) => {
       updatedAt: "updated_at",
     }
   );
-
-  Ticket.afterSave((ticket) => {
-    // TODO: update ticket
-    // http.get(process.env.API_URL, )
-  });
 
   return Ticket;
 };

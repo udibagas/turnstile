@@ -1,6 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 const { Socket } = require("net");
+const fetch = require("cross-fetch");
 
 module.exports = (sequelize, DataTypes) => {
   class Gate extends Model {
@@ -59,11 +60,23 @@ module.exports = (sequelize, DataTypes) => {
           }
 
           console.log(`${name} - OK - ${code}`);
+          // open gate
           this.socketClient.write(Buffer.from(`\xA6TRIG1\xA9`));
+          // update status local on local database
           await ticket.update({
             ticket_status: "used",
             date_used: new Date(),
             gate_id: this.id,
+          });
+
+          // update status on cloud database
+          await fetch(process.env.API_URL, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({ code: ticket.code }),
           });
         } catch (error) {
           console.log(`${name} - ERROR - ${error.message}`);
