@@ -8,6 +8,8 @@ const fetchTicket = require("./lib/fetchTicket");
 const app = express();
 const port = 3000;
 
+cron.schedule("*/10 * * * *", fetchTicket);
+
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
@@ -38,4 +40,3 @@ const scan = async () => {
 };
 
 scan();
-cron.schedule("*/10 * * * *", fetchTicket);
