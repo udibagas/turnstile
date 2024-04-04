@@ -70,14 +70,16 @@ module.exports = (sequelize, DataTypes) => {
           });
 
           // update status on cloud database
-          await fetch(process.env.API_URL, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            body: JSON.stringify({ code: ticket.code }),
-          });
+          await fetch(
+            `${process.env.API_URL}/ticket/masuk/${ticket.code}/${ticket.gate_id}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+            }
+          );
         } catch (error) {
           console.log(`${name} - ERROR - ${error.message}`);
         }
