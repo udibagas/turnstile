@@ -4,7 +4,7 @@ const [command] = process.argv.slice(2);
 
 switch (command) {
   case "ticket:fetch":
-    await fetchTicket();
+    (async () => await fetchTicket())();
     break;
 
   default:
