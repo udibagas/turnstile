@@ -3,7 +3,6 @@ const {
   create,
   update,
   destroy,
-  reconnect,
 } = require("../controllers/gate.controller");
 
 const router = require("express").Router();
