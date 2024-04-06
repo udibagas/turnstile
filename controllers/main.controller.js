@@ -21,7 +21,7 @@ module.exports = {
   },
 
   async checkIn(req, res, next) {
-    const { code } = req.query;
+    const { code } = req.body;
 
     try {
       const gate = await Gate.findOne({ where: { host: req.ip } });

@@ -7,7 +7,7 @@ const router = require("express").Router();
 router.get("/login", login);
 router.post("/login", doLogin);
 router.get("/logout", logout);
-router.get("/checkIn", checkIn);
+router.post("/checkIn", checkIn);
 
 router.use(authMiddleware);
 router.get("/", home);
