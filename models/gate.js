@@ -1,7 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
 const { Socket } = require("net");
-const fetch = require("cross-fetch");
 
 module.exports = (sequelize, DataTypes) => {
   class Gate extends Model {
@@ -43,46 +42,7 @@ module.exports = (sequelize, DataTypes) => {
         const prefix = data.slice(0, 2);
         if (!["PT", "QT"].includes(prefix)) return;
         const code = data.slice(2);
-
-        try {
-          const ticket = await sequelize.models.Ticket.findByCode(code);
-
-          if (!ticket) {
-            return console.log(`${name} - INVALID - ${code}`);
-          }
-
-          if (ticket.ticket_status == "used") {
-            return console.log(`${name} - USED - ${code}`);
-          }
-
-          if (ticket.ticket_status == "refund") {
-            return console.log(`${name} - REFUND - ${code}`);
-          }
-
-          console.log(`${name} - OK - ${code}`);
-          // open gate
-          this.socketClient.write(Buffer.from(`\xA6TRIG1\xA9`));
-          // update status local on local database
-          await ticket.update({
-            ticket_status: "used",
-            date_used: new Date(),
-            gate_id: this.id,
-          });
-
-          // update status on cloud database
-          await fetch(
-            `${process.env.API_URL}/ticket/masuk/${ticket.code}/${ticket.gate_id}`,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-              },
-            }
-          );
-        } catch (error) {
-          console.log(`${name} - ERROR - ${error.message}`);
-        }
+        sequelize.models.Ticket.checkIn(code, this);
       });
 
       this.socketClient.on("error", (error) => {

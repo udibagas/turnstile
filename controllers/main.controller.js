@@ -1,23 +1,36 @@
 const { getLastLog } = require("../lib/log");
-const { Gate } = require("../models");
+const { Gate, Ticket } = require("../models");
 
 module.exports = {
-  async home(req, res) {
+  async home(req, res, next) {
     try {
       const gates = await Gate.findAll({ order: [["name", "asc"]] });
       res.render("layout", { view: "home", gates });
     } catch (error) {
-      res.send(error.message);
-      console.log(error);
+      next(error);
     }
   },
 
-  async log(req, res) {
+  async log(req, res, next) {
     try {
       const logs = await getLastLog("./daemon/turnstileapp.out.log", 50);
       res.json({ logs });
     } catch (error) {
-      res.send(error.message);
+      next(error);
+    }
+  },
+
+  async checkIn(req, res, next) {
+    const { code } = req.query;
+
+    try {
+      const gate = await Gate.findOne({ where: { host: req.ip } });
+      if (!gate) throw new Error("Invalid gate");
+      const status = await Ticket.checkIn(code, gate);
+      if (!status) throw new Error(`Something bad happened`);
+      res.json({ message: "Silakan masuk" });
+    } catch (error) {
+      next(error);
     }
   },
 };
