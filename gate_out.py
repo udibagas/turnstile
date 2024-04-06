@@ -8,7 +8,7 @@ from serial import Serial
 DEVICE = '/dev/input/event0'
 SERIAL_DEVICE = '/dev/ttyUSB0'
 SERIAL_BAUDRATE = 9600
-OPEN_COMMAND = 'open'
+OPEN_COMMAND = '*TRIG1#'
 API_URL = 'http://192.168.1.97:3000/checkIn'
 
 
@@ -33,16 +33,16 @@ def checkIn(code):
 
 
 if __name__ == "__main__":
-
     device = InputDevice(DEVICE)
     code = ''
 
     for event in device.read_loop():
         if event.type == ecodes.EV_KEY and event.value == 1:
             key = KeyEvent(event)
-            code += str(key.key_name)  # TODO: masih perlu dicek
 
             if key.keycode == 'KEY_ENTER':
                 print(code)
                 threading.Thread(target=checkIn, args=(code,)).start()
                 code = ''
+
+            code += chr(key.keycode)
