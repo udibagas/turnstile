@@ -26,17 +26,17 @@ module.exports = (sequelize, DataTypes) => {
 
         console.log(`${gate.name} - OK - ${code}`);
 
-        // open gate
-        if (gate.socketClient) {
-          gate.socketClient.write(Buffer.from(`\xA6TRIG1\xA9`));
-        }
-
         // update status local on local database
         await ticket.update({
           ticket_status: "used",
           date_used: new Date(),
           gate_id: gate.id,
         });
+
+        // open gate
+        if (gate.socketClient) {
+          gate.socketClient.write(Buffer.from(`\xA6TRIG1\xA9`));
+        }
 
         // update status on cloud database
         fetch(
