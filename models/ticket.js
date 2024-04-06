@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
         }
 
         // update status local on local database
-        ticket.update({
+        await ticket.update({
           ticket_status: "used",
           date_used: new Date(),
           gate_id: gate.id,
