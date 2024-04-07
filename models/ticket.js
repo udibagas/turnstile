@@ -62,9 +62,36 @@ module.exports = (sequelize, DataTypes) => {
       code: DataTypes.STRING,
       batch_generate: DataTypes.STRING,
       ticket_status: DataTypes.STRING,
-      date_generate: DataTypes.DATE,
-      date_used: DataTypes.DATE,
-      date_refund: DataTypes.DATE,
+      date_generate: {
+        type: DataTypes.DATE,
+        get() {
+          const rawValue = this.getDataValue("date_generate");
+          return rawValue?.toLocaleString("id-ID", {
+            dateStyle: "medium",
+            timeStyle: "short",
+          });
+        },
+      },
+      date_used: {
+        type: DataTypes.DATE,
+        get() {
+          const rawValue = this.getDataValue("date_used");
+          return rawValue?.toLocaleString("id-ID", {
+            dateStyle: "medium",
+            timeStyle: "short",
+          });
+        },
+      },
+      date_refund: {
+        type: DataTypes.DATE,
+        get() {
+          const rawValue = this.getDataValue("date_refund");
+          return rawValue?.toLocaleString("id-ID", {
+            dateStyle: "medium",
+            timeStyle: "short",
+          });
+        },
+      },
       gate_id: DataTypes.STRING,
     },
     {

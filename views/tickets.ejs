@@ -1,0 +1,30 @@
+<div class="container">
+  <h1 class="my-4">Tickets</h1>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Code</th>
+        <th>Batch Generate</th>
+        <th>Date Generate</th>
+        <th>Status</th>
+        <th>Date Used</th>
+        <th>Date Refund</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% tickets.forEach((el, index) => { %>
+      <tr>
+        <td><%= ++index %></td>
+        <td><%= el.code %></td>
+        <td><%= el.batch_generate %></td>
+        <td><%= el.date_generate %></td>
+        <td><%= el.ticket_status %></td>
+        <td><%= el.date_used %></td>
+        <td><%= el.date_refund %></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>

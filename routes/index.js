@@ -1,5 +1,6 @@
 const { login, doLogin, logout } = require("../controllers/auth.controller");
-const { home, log, checkIn } = require("../controllers/main.controller");
+const { home, log } = require("../controllers/main.controller");
+const { checkIn, index } = require("../controllers/ticket.controller");
 const authMiddleware = require("../middlewares/auth.middleware");
 
 const router = require("express").Router();
@@ -13,5 +14,6 @@ router.use(authMiddleware);
 router.get("/", home);
 router.get("/log", log);
 router.use("/gate", require("./gate.route"));
+router.get("/tickets", index);
 
 module.exports = router;
