@@ -1,9 +1,25 @@
+const { Op } = require("sequelize");
 const { Gate, Ticket } = require("../models");
 
 module.exports = {
   async index(req, res, next) {
+    const { search, page } = req.query;
+    const options = {};
+
+    if (search) {
+      options.where = {
+        code: {
+          [Op.like]: `%${search}%`,
+        },
+      };
+    }
+
+    if (page) {
+      // TODO: pagination
+    }
+
     try {
-      const tickets = await Ticket.findAll();
+      const tickets = await Ticket.findAll(options);
       res.render("layout", { view: "tickets", tickets });
     } catch (error) {
       next(error);

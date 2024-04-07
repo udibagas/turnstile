@@ -1,5 +1,70 @@
 <div class="container">
-  <h1 class="my-4">Tickets</h1>
+  <div class="d-flex justify-content-between align-items-center">
+    <h1 class="my-5">Tickets</h1>
+
+    <form class="row g-3">
+      <div class="col-auto">
+        <input
+          type="radio"
+          class="btn-check"
+          name="status"
+          id="option5"
+          autocomplete="off"
+          checked
+          value="all"
+        />
+        <label class="btn" for="option5">All</label>
+      </div>
+
+      <div class="col-auto">
+        <input
+          type="radio"
+          class="btn-check"
+          name="status"
+          id="optionReady"
+          autocomplete="off"
+          value="ready"
+        />
+        <label class="btn" for="optionReady">Ready</label>
+      </div>
+
+      <div class="col-auto">
+        <input
+          type="radio"
+          class="btn-check"
+          name="status"
+          id="optionUsed"
+          autocomplete="off"
+          value="used"
+        />
+        <label class="btn" for="optionUsed">Used</label>
+      </div>
+
+      <div class="col-auto">
+        <input
+          type="radio"
+          class="btn-check"
+          name="status"
+          id="optionRefund"
+          autocomplete="off"
+          value="refund"
+        />
+        <label class="btn" for="optionRefund">Refund</label>
+      </div>
+
+      <div class="col-auto">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search Ticket"
+          name="search"
+        />
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </div>
+    </form>
+  </div>
 
   <table class="table table-striped">
     <thead>
@@ -14,13 +79,18 @@
       </tr>
     </thead>
     <tbody>
-      <% tickets.forEach((el, index) => { %>
+      <% const colors = { ready: 'success', used: 'secondary', refund: 'danger'
+      } %> <% tickets.forEach((el, index) => { %>
       <tr>
         <td><%= ++index %></td>
         <td><%= el.code %></td>
         <td><%= el.batch_generate %></td>
         <td><%= el.date_generate %></td>
-        <td><%= el.ticket_status %></td>
+        <td>
+          <span class="badge text-bg-<%= colors[el.ticket_status] %>">
+            <%= el.ticket_status.toUpperCase() %>
+          </span>
+        </td>
         <td><%= el.date_used %></td>
         <td><%= el.date_refund %></td>
       </tr>
