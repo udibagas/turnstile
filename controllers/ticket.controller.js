@@ -3,8 +3,14 @@ const { Gate, Ticket } = require("../models");
 
 module.exports = {
   async index(req, res, next) {
-    const { search, status: ticket_status, page } = req.query;
-    const options = {};
+    const { search, status: ticket_status, page = 1 } = req.query;
+    const pageSize = 15;
+    let totalPage = 1;
+
+    const options = {
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+    };
 
     if (search) {
       options.where = {
@@ -13,17 +19,20 @@ module.exports = {
         },
       };
     }
+
     if (ticket_status) {
       options.where = { ticket_status };
     }
 
-    if (page) {
-      // TODO: pagination
-    }
-
     try {
-      const tickets = await Ticket.findAll(options);
-      res.render("layout", { view: "tickets", tickets, query: req.query });
+      const tickets = await Ticket.findAndCountAll(options);
+      totalPage = Math.ceil(tickets.count / pageSize);
+      res.render("layout", {
+        view: "tickets",
+        tickets,
+        query: { ...req.query, page },
+        totalPage,
+      });
     } catch (error) {
       next(error);
     }

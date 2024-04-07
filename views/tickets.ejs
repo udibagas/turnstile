@@ -68,9 +68,9 @@
     </thead>
     <tbody>
       <% const colors = { ready: 'success', used: 'secondary', refund: 'danger'
-      } %> <% tickets.forEach((el, index) => { %>
+      } %> <% tickets.rows.forEach((el, index) => { %>
       <tr>
-        <td><%= ++index %></td>
+        <td><%= ((query.page - 1) * 15) + index + 1 %></td>
         <td><%= el.code %></td>
         <td><%= el.batch_generate %></td>
         <td><%= el.date_generate %></td>
@@ -85,6 +85,32 @@
       <% }) %>
     </tbody>
   </table>
+
+  <nav aria-label="pagination">
+    <ul class="pagination">
+      <li class="page-item disabled">
+        <a class="page-link">Previous</a>
+      </li>
+      <% for (let i = 1; i < totalPage ; i++) { %>
+      <li class="page-item <%= query.page == i ? 'active' : '' %>">
+        <a
+          class="page-link"
+          href="/tickets?page=<%= i  %>&status=<%= query.status %>&search=<%= query.search %>"
+        >
+          <%= i %>
+        </a>
+      </li>
+      <% } %>
+
+      <li class="page-item">
+        <a
+          class="page-link <%= query.page >= totalPage ? 'disabled' : '' %>"
+          href="/tickets?page=<%= +query.page + 1  %>&status=<%= query.status %>&search=<%= query.search %>"
+          >Next</a
+        >
+      </li>
+    </ul>
+  </nav>
 </div>
 
 <script>
