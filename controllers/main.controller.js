@@ -24,7 +24,7 @@ module.exports = {
     const { code } = req.body;
 
     try {
-      const gate = await Gate.findOne({ where: { host: req.ip } });
+      const gate = await Gate.findOne({ where: { host: req.ip.slice(7) } });
       if (!gate) throw new Error("Invalid gate");
       const status = await Ticket.checkIn(code, gate);
       if (!status) throw new Error(`Something bad happened`);
