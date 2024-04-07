@@ -3,7 +3,7 @@ const { Gate, Ticket } = require("../models");
 
 module.exports = {
   async index(req, res, next) {
-    const { search, page } = req.query;
+    const { search, status: ticket_status, page } = req.query;
     const options = {};
 
     if (search) {
@@ -13,6 +13,9 @@ module.exports = {
         },
       };
     }
+    if (ticket_status) {
+      options.where = { ticket_status };
+    }
 
     if (page) {
       // TODO: pagination
@@ -20,7 +23,7 @@ module.exports = {
 
     try {
       const tickets = await Ticket.findAll(options);
-      res.render("layout", { view: "tickets", tickets });
+      res.render("layout", { view: "tickets", tickets, query: req.query });
     } catch (error) {
       next(error);
     }

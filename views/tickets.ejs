@@ -4,61 +4,49 @@
 
     <form class="row g-3">
       <div class="col-auto">
-        <input
-          type="radio"
-          class="btn-check"
-          name="status"
-          id="option5"
-          autocomplete="off"
-          checked
-          value="all"
-        />
-        <label class="btn" for="option5">All</label>
+        <input type="radio" class="btn-check" name="status" id="optionAll"
+        autocomplete="off" <%= !query.status ? 'checked' : '' %> value="" />
+        <label class="btn" for="optionAll">All</label>
       </div>
 
       <div class="col-auto">
-        <input
-          type="radio"
-          class="btn-check"
-          name="status"
-          id="optionReady"
-          autocomplete="off"
-          value="ready"
-        />
+        <input type="radio" class="btn-check" name="status" id="optionReady"
+        autocomplete="off" value="ready" <%= query.status == 'ready' ? 'checked'
+        : '' %> />
         <label class="btn" for="optionReady">Ready</label>
       </div>
 
       <div class="col-auto">
-        <input
-          type="radio"
-          class="btn-check"
-          name="status"
-          id="optionUsed"
-          autocomplete="off"
-          value="used"
-        />
+        <input type="radio" class="btn-check" name="status" id="optionUsed"
+        autocomplete="off" value="used" <%= query.status == 'used' ? 'checked' :
+        '' %> />
         <label class="btn" for="optionUsed">Used</label>
       </div>
 
       <div class="col-auto">
-        <input
-          type="radio"
-          class="btn-check"
-          name="status"
-          id="optionRefund"
-          autocomplete="off"
-          value="refund"
-        />
+        <input type="radio" class="btn-check" name="status" id="optionRefund"
+        autocomplete="off" value="refund" <%= query.status == 'refund' ?
+        'checked' : '' %> />
         <label class="btn" for="optionRefund">Refund</label>
       </div>
 
       <div class="col-auto">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Search Ticket"
-          name="search"
-        />
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search Ticket"
+            name="search"
+            value="<%= query.search || '' %>"
+          />
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            id="clear-btn"
+          >
+            X
+          </button>
+        </div>
       </div>
       <div class="col-auto">
         <button type="submit" class="btn btn-primary">Search</button>
@@ -98,3 +86,19 @@
     </tbody>
   </table>
 </div>
+
+<script>
+  const clearBtn = document.querySelector("#clear-btn");
+  clearBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    window.location.href = "/tickets";
+  });
+
+  const options = document.querySelectorAll("[type=radio]");
+  options.forEach((el) => {
+    el.addEventListener("change", (e) => {
+      const status = e.target.value;
+      window.location.href = `/tickets?status=${status}`;
+    });
+  });
+</script>
