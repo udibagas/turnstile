@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-from evdev import InputDevice, categorize, ecodes, KeyEvent
+from evdev import InputDevice, ecodes, KeyEvent
 import requests
 import time
 import threading
 from serial import Serial
 
-DEVICE = '/dev/input/event0'
+DEVICE = '/dev/input/event3'
 SERIAL_DEVICE = '/dev/ttyUSB0'
 SERIAL_BAUDRATE = 9600
 OPEN_COMMAND = '*TRIG1#'
-API_URL = 'http://192.168.1.97:3000/checkIn'
+API_URL = 'http://10.5.50.99:3000/checkIn'
 
 
 def checkIn(code):
@@ -19,20 +19,19 @@ def checkIn(code):
         r = requests.post(API_URL, json=payload, timeout=3)
         print(r.text)
         if r.status_code == 200:
-            # TODO: open gate
+            print('Valid code')
             ser = Serial(SERIAL_DEVICE, SERIAL_BAUDRATE, timeout=1)
             ser.write(OPEN_COMMAND.encode())
             ser.close()
         else:
-            # TODO: nyalakan led maybe?
-            print('Failed')
-            pass
+            print('Invalid code')
     except Exception as e:
-        print(e)
+        print('Invalid code')
         time.sleep(2)
 
 
 if __name__ == "__main__":
+
     device = InputDevice(DEVICE)
     code = ''
 
@@ -40,9 +39,12 @@ if __name__ == "__main__":
         if event.type == ecodes.EV_KEY and event.value == 1:
             key = KeyEvent(event)
 
-            if key.keycode == 'KEY_ENTER':
-                print(code)
+            if len(code) == 36 or key.keycode == 'KEY_ENTER':
+                print('Code: ', code)
                 threading.Thread(target=checkIn, args=(code,)).start()
                 code = ''
 
-            code += chr(key.keycode)
+            if (key.keycode == 'KEY_MINUS'):
+                code += '-'
+            else:
+                code += key.keycode[4:].lower()
