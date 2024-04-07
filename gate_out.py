@@ -39,12 +39,12 @@ if __name__ == "__main__":
         if event.type == ecodes.EV_KEY and event.value == 1:
             key = KeyEvent(event)
 
-            if len(code) == 36 or key.keycode == 'KEY_ENTER':
-                print('Code: ', code)
-                threading.Thread(target=checkIn, args=(code,)).start()
-                code = ''
-
             if (key.keycode == 'KEY_MINUS'):
                 code += '-'
             else:
                 code += key.keycode[4:].lower()
+
+            if len(code) == 36 or key.keycode == 'KEY_ENTER':
+                print('Code: ', code)
+                threading.Thread(target=checkIn, args=(code,)).start()
+                code = ''
