@@ -1,5 +1,5 @@
 module.exports = (error, req, res, next) => {
-  console.error(error);
+  console.log(error);
   if (error.name == "SequelizeValidationError") {
     const errors = {};
 
