@@ -32,6 +32,7 @@ module.exports = {
         tickets,
         query: { ...req.query, page },
         totalPage,
+        route: "/tickets",
       });
     } catch (error) {
       next(error);
