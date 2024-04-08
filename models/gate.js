@@ -33,6 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       const { name, host, port } = this;
 
       this.socketClient.connect(port, host, () => {
+        this.update({ status: true });
         console.log(`${name} - CONNECTED`);
       });
 
@@ -51,6 +52,7 @@ module.exports = (sequelize, DataTypes) => {
 
       this.socketClient.on("error", (error) => {
         console.log(`${name} - ERROR - ${error.message}`);
+        this.update({ status: false });
         this.reconnect();
       });
     }
@@ -87,6 +89,7 @@ module.exports = (sequelize, DataTypes) => {
           isInt: { msg: "Port harus berupa angka" },
         },
       },
+      status: DataTypes.BOOLEAN,
     },
     {
       sequelize,

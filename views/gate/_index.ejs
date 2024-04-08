@@ -10,6 +10,7 @@
   <thead>
     <tr>
       <th>No.</th>
+      <th>Status</th>
       <th>Nama</th>
       <th>Host</th>
       <th>Port</th>
@@ -17,9 +18,14 @@
     </tr>
   </thead>
   <tbody>
-    <% gates.forEach(({id, name, host, port,}, index) => { %>
+    <% gates.forEach(({id, name, host, port,status}, index) => { %>
     <tr>
       <td><%= index + 1 %></td>
+      <td>
+        <span class="badge text-bg-<%= status ? 'success' : 'danger' %>">
+          <%= status ? 'CONNECTED' : 'DICONNECTED' %>
+        </span>
+      </td>
       <td><%= name %></td>
       <td><%= host %></td>
       <td><%= port %></td>
