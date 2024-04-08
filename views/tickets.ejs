@@ -1,6 +1,6 @@
 <div class="container">
   <div class="d-flex justify-content-between align-items-center">
-    <h1 class="my-5">Tickets</h1>
+    <h1 class="my-3">Tickets</h1>
 
     <form class="row g-3">
       <div class="col-auto">
@@ -59,11 +59,11 @@
       <tr>
         <th>No</th>
         <th class="text-center">Status</th>
-        <th>Code</th>
-        <th>Batch Generate</th>
-        <th>Date Generate</th>
-        <th>Date Used</th>
-        <th>Date Refund</th>
+        <th class="text-center">Code</th>
+        <th class="text-center">Batch Generate</th>
+        <th class="text-center">Date Generate</th>
+        <th class="text-center">Date Used</th>
+        <th class="text-center">Date Refund</th>
       </tr>
     </thead>
     <tbody>
@@ -76,11 +76,11 @@
             <%= el.ticket_status.toUpperCase() %>
           </span>
         </td>
-        <td><%= el.code %></td>
-        <td><%= el.batch_generate %></td>
-        <td><%= el.date_generate %></td>
-        <td><%= el.date_used %></td>
-        <td><%= el.date_refund %></td>
+        <td class="text-center"><%= el.code %></td>
+        <td class="text-center"><%= el.batch_generate %></td>
+        <td class="text-center"><%= el.date_generate %></td>
+        <td class="text-center"><%= el.date_used %></td>
+        <td class="text-center"><%= el.date_refund %></td>
       </tr>
       <% }) %>
     </tbody>
