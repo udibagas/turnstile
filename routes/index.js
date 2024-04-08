@@ -7,6 +7,7 @@ const {
   show,
   fetch,
 } = require("../controllers/ticket.controller");
+const { update } = require("../controllers/user.controller");
 const authMiddleware = require("../middlewares/auth.middleware");
 const router = require("express").Router();
 
@@ -24,5 +25,6 @@ router.use("/gate", require("./gate.route"));
 router.get("/tickets", index);
 router.get("/tickets/fetch", fetch);
 router.get("/tickets/:code", show);
+router.put("/user", update);
 
 module.exports = router;

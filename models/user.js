@@ -1,5 +1,5 @@
 "use strict";
-const { compareSync } = require("bcryptjs");
+const { compareSync, hashSync } = require("bcryptjs");
 const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
@@ -23,6 +23,12 @@ module.exports = (sequelize, DataTypes) => {
       updatedAt: "updated_at",
     }
   );
+
+  User.beforeSave((user) => {
+    if (user.password) {
+      user.password = hashSync(user.password);
+    }
+  });
 
   return User;
 };
