@@ -58,10 +58,10 @@
     <thead>
       <tr>
         <th>No</th>
+        <th class="text-center">Status</th>
         <th>Code</th>
         <th>Batch Generate</th>
         <th>Date Generate</th>
-        <th>Status</th>
         <th>Date Used</th>
         <th>Date Refund</th>
       </tr>
@@ -71,14 +71,14 @@
       } %> <% tickets.rows.forEach((el, index) => { %>
       <tr>
         <td><%= ((query.page - 1) * 15) + index + 1 %></td>
-        <td><%= el.code %></td>
-        <td><%= el.batch_generate %></td>
-        <td><%= el.date_generate %></td>
-        <td>
+        <td class="text-center">
           <span class="badge text-bg-<%= colors[el.ticket_status] %>">
             <%= el.ticket_status.toUpperCase() %>
           </span>
         </td>
+        <td><%= el.code %></td>
+        <td><%= el.batch_generate %></td>
+        <td><%= el.date_generate %></td>
         <td><%= el.date_used %></td>
         <td><%= el.date_refund %></td>
       </tr>
