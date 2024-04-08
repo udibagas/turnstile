@@ -50,4 +50,17 @@ module.exports = {
       next(error);
     }
   },
+
+  async show(req, res, next) {
+    const { code } = req.params;
+
+    try {
+      const ticket = await Ticket.findOne({ where: { code } });
+      if (!ticket) throw new Error(`Invalid ticket id`);
+      // TODO: generate QR
+      res.json({ ticket });
+    } catch (error) {
+      next(error);
+    }
+  },
 };

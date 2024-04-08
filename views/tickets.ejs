@@ -76,7 +76,11 @@
             <%= el.ticket_status.toUpperCase() %>
           </span>
         </td>
-        <td class="text-center"><%= el.code %></td>
+        <td class="text-center">
+          <a href="/tickets/generateQr/<%= el.id %>" target="_blank">
+            <%= el.code %>
+          </a>
+        </td>
         <td class="text-center"><%= el.batch_generate %></td>
         <td class="text-center"><%= el.date_generate %></td>
         <td class="text-center"><%= el.date_used %></td>
