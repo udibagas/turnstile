@@ -11,18 +11,17 @@ module.exports = {
     const options = {
       limit: pageSize,
       offset: (page - 1) * pageSize,
+      where: {},
     };
 
     if (search) {
-      options.where = {
-        code: {
-          [Op.like]: `%${search}%`,
-        },
+      options.where.code = {
+        [Op.like]: `%${search}%`,
       };
     }
 
     if (ticket_status) {
-      options.where = { ticket_status };
+      options.where.ticket_status = ticket_status;
     }
 
     try {
