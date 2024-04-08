@@ -1,6 +1,11 @@
 const { login, doLogin, logout } = require("../controllers/auth.controller");
-const { home, log } = require("../controllers/main.controller");
-const { checkIn, index, show } = require("../controllers/ticket.controller");
+const { home, log, getLog } = require("../controllers/main.controller");
+const {
+  checkIn,
+  index,
+  show,
+  fetch,
+} = require("../controllers/ticket.controller");
 const authMiddleware = require("../middlewares/auth.middleware");
 const router = require("express").Router();
 
@@ -12,8 +17,10 @@ router.post("/checkIn", checkIn);
 router.use(authMiddleware);
 router.get("/", home);
 router.get("/log", log);
+router.get("/getLog", getLog);
 router.use("/gate", require("./gate.route"));
 router.get("/tickets", index);
+router.get("/tickets/fetch", fetch);
 router.get("/tickets/:code", show);
 
 module.exports = router;

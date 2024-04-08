@@ -1,0 +1,29 @@
+<div class="log" id="log"></div>
+
+<script>
+  const logContainer = document.querySelector("#log");
+
+  const fetchLog = (time) => {
+    return fetch(`/getLog?time=${time}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+  };
+
+  setInterval(() => {
+    const time = Date.now();
+    fetchLog(time)
+      .then((res) => {
+        return res.clone().json();
+      })
+      .then((log) => {
+        logContainer.innerHTML = log.logs.map((e) => `> ${e}`).join("<br />");
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  }, 300);
+</script>

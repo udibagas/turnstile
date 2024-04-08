@@ -1,12 +1,11 @@
 require("dotenv").config();
 const { Op } = require("sequelize");
 const { Ticket } = require("./models");
-const fetchTicket = require("./lib/fetchTicket");
 const [command, ...params] = process.argv.slice(2);
 
 switch (command) {
   case "ticket:fetch":
-    fetchTicket();
+    Ticket.fetch();
     break;
 
   case "ticket:prune":

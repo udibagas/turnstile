@@ -1,14 +1,13 @@
 require("dotenv").config();
 const express = require("express");
 const cron = require("node-cron");
-const { Gate } = require("./models");
+const { Gate, Ticket } = require("./models");
 const errorMiddleware = require("./middlewares/error.middleware");
 const cookieMiddleware = require("./middlewares/cookie.middleware");
-const fetchTicket = require("./lib/fetchTicket");
 const app = express();
 const port = 3000;
 
-cron.schedule("*/10 * * * *", fetchTicket);
+cron.schedule("*/10 * * * *", Ticket.fetch);
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));

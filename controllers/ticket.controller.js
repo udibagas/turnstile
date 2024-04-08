@@ -63,4 +63,13 @@ module.exports = {
       next(error);
     }
   },
+
+  async fetch(req, res, next) {
+    try {
+      await Ticket.fetch();
+      res.redirect("/tickets");
+    } catch (error) {
+      next(error);
+    }
+  },
 };
