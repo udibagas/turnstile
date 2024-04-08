@@ -89,7 +89,7 @@ module.exports = (sequelize, DataTypes) => {
 
         if (filteredData.length > 0) {
           console.log(`Got ${filteredData.length} new tickets`);
-          await Ticket.bulkCreate(mappedData);
+          await Ticket.bulkCreate(filteredData);
         }
       }
     }
