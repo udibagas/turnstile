@@ -4,6 +4,26 @@ const fetch = require("cross-fetch");
 
 module.exports = (sequelize, DataTypes) => {
   class Ticket extends Model {
+    updateToCloud() {
+      fetch(
+        `${process.env.API_URL}/ticket/masuk/${this.code}/${this.gate_id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      )
+        .then((_) => {
+          console.log("SUCCESS update ticket to the cloud");
+        })
+        .catch((err) => {
+          console.log(err.message);
+          this.updateToCloud();
+        });
+    }
+
     static findByCode(code) {
       return this.findOne({ where: { code } });
     }
@@ -32,23 +52,7 @@ module.exports = (sequelize, DataTypes) => {
         gate_id: gate.id,
       });
 
-      // update status on cloud database
-      fetch(
-        `${process.env.API_URL}/ticket/masuk/${ticket.code}/${ticket.gate_id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      )
-        .then((_) => {
-          console.log("SUCCESS update ticket to the cloud");
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
+      ticket.updateToCloud();
 
       // open gate
       if (gate.socketClient) {

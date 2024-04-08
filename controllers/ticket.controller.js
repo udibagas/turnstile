@@ -44,7 +44,11 @@ module.exports = {
     try {
       const gate = await Gate.findOne({ where: { host: req.ip.slice(7) } });
       if (!gate) throw new Error("Invalid gate");
-      gate.update({ status: true }); // set gate status to connected when any request
+
+      if (!gate.status) {
+        await gate.update({ status: true });
+      }
+
       await Ticket.checkIn(code, gate);
       res.json({ message: "Silakan masuk" });
     } catch (error) {
