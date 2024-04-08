@@ -82,7 +82,7 @@
         </td>
         <td class="text-center">
           <a
-            class="text-decoration-none"
+            class="ticket-link text-decoration-none"
             href="/tickets/<%= el.code %>"
             target="_blank"
           >
@@ -137,7 +137,38 @@
   </div>
 </div>
 
+<div
+  class="modal fade"
+  id="ticketModal"
+  tabindex="-1"
+  aria-labelledby="ticketModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="ticketModalLabel">Ticket QR Code</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <img src="" alt="" id="qr" style="width: 100%" />
+        <br />
+        <h3 class="text-center" id="ticket-code"></h3>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
+  const modal = new bootstrap.Modal("#ticketModal");
+  const qr = document.querySelector("#qr");
+  const ticketCode = document.querySelector("#ticket-code");
+
   const clearBtn = document.querySelector("#clear-btn");
   clearBtn.addEventListener("click", (e) => {
     e.preventDefault();
@@ -149,6 +180,19 @@
     el.addEventListener("change", (e) => {
       const status = e.target.value;
       window.location.href = `/tickets?status=${status}`;
+    });
+  });
+
+  const ticketLinks = document.querySelectorAll(".ticket-link");
+  ticketLinks.forEach((el) => {
+    el.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const url = e.target.href;
+      const res = await fetch(url);
+      const json = await res.json();
+      qr.src = json.qr;
+      ticketCode.textContent = json.ticket.code;
+      modal.show();
     });
   });
 </script>

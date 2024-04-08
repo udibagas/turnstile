@@ -1,5 +1,6 @@
 const { Op } = require("sequelize");
 const { Gate, Ticket } = require("../models");
+const QRCode = require("qrcode");
 
 module.exports = {
   async index(req, res, next) {
@@ -57,8 +58,8 @@ module.exports = {
     try {
       const ticket = await Ticket.findOne({ where: { code } });
       if (!ticket) throw new Error(`Invalid ticket id`);
-      // TODO: generate QR
-      res.json({ ticket });
+      const qr = await QRCode.toDataURL(ticket.code, { width: 200 });
+      res.json({ ticket, qr });
     } catch (error) {
       next(error);
     }
