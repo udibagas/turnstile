@@ -1,5 +1,6 @@
 const { login, doLogin, logout } = require("../controllers/auth.controller");
-const { home, log, getLog } = require("../controllers/main.controller");
+const { home } = require("../controllers/gate.controller");
+const { log, getLog } = require("../controllers/main.controller");
 const {
   checkIn,
   index,
@@ -19,6 +20,7 @@ router.get("/", home);
 router.get("/log", log);
 router.get("/getLog", getLog);
 router.use("/gate", require("./gate.route"));
+
 router.get("/tickets", index);
 router.get("/tickets/fetch", fetch);
 router.get("/tickets/:code", show);

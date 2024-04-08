@@ -1,10 +1,10 @@
 const { Gate } = require("../models");
 
 module.exports = {
-  async index(req, res) {
+  async home(req, res) {
     try {
       const gates = await Gate.findAll({ order: [["name", "asc"]] });
-      res.json(gates);
+      res.render("layout", { view: "home", gates, route: "/" });
     } catch (error) {
       next(error);
     }
