@@ -86,17 +86,18 @@
     </tbody>
   </table>
 
-  <nav aria-label="pagination">
-    <ul class="pagination">
-      <li class="page-item <%= query.page == 1 ? 'disabled' : '' %>">
-        <a
-          class="page-link"
-          href="/tickets?page=<%= +query.page - 1  %>&status=<%= query.status %>&search=<%= query.search %>"
-          >&laquo; Prev</a
-        >
-      </li>
-      <% for (let i = 1; i <= totalPage ; i++) { %>
-      <!--
+  <div class="d-flex align-items-center justify-content-between">
+    <nav aria-label="pagination">
+      <ul class="pagination">
+        <li class="page-item <%= query.page == 1 ? 'disabled' : '' %>">
+          <a
+            class="page-link"
+            href="/tickets?page=<%= +query.page - 1  %>&status=<%= query.status %>&search=<%= query.search %>"
+            >&laquo; Prev</a
+          >
+        </li>
+        <% for (let i = 1; i <= totalPage ; i++) { %>
+        <!--
       <li class="page-item <%= query.page == i ? 'active' : '' %>">
         <a
           class="page-link"
@@ -106,18 +107,22 @@
         </a>
       </li>
       -->
-      <% } %>
+        <% } %>
 
-      <li class="page-item <%= query.page >= totalPage ? 'disabled' : '' %>">
-        <a
-          class="page-link"
-          href="/tickets?page=<%= +query.page + 1  %>&status=<%= query.status %>&search=<%= query.search %>"
-        >
-          Next &raquo;</a
-        >
-      </li>
-    </ul>
-  </nav>
+        <li class="page-item <%= query.page >= totalPage ? 'disabled' : '' %>">
+          <a
+            class="page-link"
+            href="/tickets?page=<%= +query.page + 1  %>&status=<%= query.status %>&search=<%= query.search %>"
+          >
+            Next &raquo;</a
+          >
+        </li>
+      </ul>
+    </nav>
+    <div>
+      Page <%= query.page %> of <%= totalPage %> (<%= tickets.count %> rows)
+    </div>
+  </div>
 </div>
 
 <script>
