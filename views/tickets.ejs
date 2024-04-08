@@ -92,10 +92,11 @@
         <a
           class="page-link"
           href="/tickets?page=<%= +query.page - 1  %>&status=<%= query.status %>&search=<%= query.search %>"
-          >Prev</a
+          >&laquo; Prev</a
         >
       </li>
       <% for (let i = 1; i <= totalPage ; i++) { %>
+      <!--
       <li class="page-item <%= query.page == i ? 'active' : '' %>">
         <a
           class="page-link"
@@ -104,13 +105,15 @@
           <%= i %>
         </a>
       </li>
+      -->
       <% } %>
 
       <li class="page-item <%= query.page >= totalPage ? 'disabled' : '' %>">
         <a
           class="page-link"
           href="/tickets?page=<%= +query.page + 1  %>&status=<%= query.status %>&search=<%= query.search %>"
-          >Next</a
+        >
+          Next &raquo;</a
         >
       </li>
     </ul>
