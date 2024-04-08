@@ -42,7 +42,11 @@ module.exports = (sequelize, DataTypes) => {
         const prefix = data.slice(0, 2);
         if (!["PT", "QT"].includes(prefix)) return;
         const code = data.slice(2);
-        sequelize.models.Ticket.checkIn(code, this);
+        try {
+          await sequelize.models.Ticket.checkIn(code, this);
+        } catch (error) {
+          console.log(error.message);
+        }
       });
 
       this.socketClient.on("error", (error) => {
