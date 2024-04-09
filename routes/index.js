@@ -1,6 +1,6 @@
 const { login, doLogin, logout } = require("../controllers/auth.controller");
 const { home } = require("../controllers/gate.controller");
-const { log, getLog } = require("../controllers/main.controller");
+const { log } = require("../controllers/main.controller");
 const {
   checkIn,
   index,
@@ -19,7 +19,6 @@ router.post("/checkIn", checkIn);
 router.use(authMiddleware);
 router.get("/", home);
 router.get("/log", log);
-router.get("/getLog", getLog);
 router.use("/gate", require("./gate.route"));
 
 router.get("/tickets", index);

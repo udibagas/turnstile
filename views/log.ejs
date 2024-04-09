@@ -4,7 +4,7 @@
   const logContainer = document.querySelector("#log");
 
   const fetchLog = (time) => {
-    return fetch(`/getLog?time=${time}`, {
+    return fetch(`/log?time=${time}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
