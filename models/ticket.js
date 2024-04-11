@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     static async paginate(page = 1, pageSize = 15, filter) {
-      const { search, status: ticket_status } = filter;
+      const { search, ticket_status } = filter;
 
       const options = {
         limit: pageSize,
