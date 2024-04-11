@@ -1,5 +1,5 @@
 "use strict";
-const { Model } = require("sequelize");
+const { Model, Op } = require("sequelize");
 const fetch = require("cross-fetch");
 
 module.exports = (sequelize, DataTypes) => {
@@ -22,6 +22,30 @@ module.exports = (sequelize, DataTypes) => {
           console.log(err.message);
           this.updateToCloud();
         });
+    }
+
+    static async paginate(page = 1, pageSize = 15, filter) {
+      const { search, status: ticket_status } = filter;
+
+      const options = {
+        limit: pageSize,
+        offset: (page - 1) * pageSize,
+        where: {},
+      };
+
+      if (search) {
+        options.where.code = {
+          [Op.like]: `%${search}%`,
+        };
+      }
+
+      if (ticket_status) {
+        options.where.ticket_status = ticket_status;
+      }
+
+      const data = await Ticket.findAndCountAll(options);
+      data.totalPage = Math.ceil(data.count / pageSize);
+      return data;
     }
 
     static findByCode(code) {

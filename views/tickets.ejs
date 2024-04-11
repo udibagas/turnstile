@@ -72,7 +72,7 @@
     </thead>
     <tbody>
       <% const colors = { ready: 'success', used: 'secondary', refund: 'danger'
-      } %> <% tickets.rows.forEach((el, index) => { %>
+      } %> <% data.rows.forEach((el, index) => { %>
       <tr>
         <td><%= ((query.page - 1) * 15) + index + 1 %></td>
         <td class="text-center">
@@ -108,7 +108,7 @@
             >&laquo; Prev</a
           >
         </li>
-        <% for (let i = 1; i <= totalPage ; i++) { %>
+        <% for (let i = 1; i <= data.totalPage ; i++) { %>
         <!--
       <li class="page-item <%= query.page == i ? 'active' : '' %>">
         <a
@@ -121,7 +121,9 @@
       -->
         <% } %>
 
-        <li class="page-item <%= query.page >= totalPage ? 'disabled' : '' %>">
+        <li
+          class="page-item <%= query.page >= data.totalPage ? 'disabled' : '' %>"
+        >
           <a
             class="page-link"
             href="/tickets?page=<%= +query.page + 1  %>&status=<%= query.status %>&search=<%= query.search %>"
@@ -132,7 +134,7 @@
       </ul>
     </nav>
     <div>
-      Page <%= query.page %> of <%= totalPage %> (<%= tickets.count %> rows)
+      Page <%= query.page %> of <%= data.totalPage %> (<%= data.count %> rows)
     </div>
   </div>
 </div>

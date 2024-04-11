@@ -1,37 +1,16 @@
-const { Op } = require("sequelize");
 const { Gate, Ticket } = require("../models");
 const QRCode = require("qrcode");
 
 module.exports = {
   async index(req, res, next) {
     const { search, status: ticket_status, page = 1 } = req.query;
-    const pageSize = 15;
-    let totalPage = 1;
-
-    const options = {
-      limit: pageSize,
-      offset: (page - 1) * pageSize,
-      where: {},
-    };
-
-    if (search) {
-      options.where.code = {
-        [Op.like]: `%${search}%`,
-      };
-    }
-
-    if (ticket_status) {
-      options.where.ticket_status = ticket_status;
-    }
 
     try {
-      const tickets = await Ticket.findAndCountAll(options);
-      totalPage = Math.ceil(tickets.count / pageSize);
+      const data = await Ticket.paginate(page, 15, { search, ticket_status });
       res.render("layout", {
         view: "tickets",
-        tickets,
+        data,
         query: { ...req.query, page },
-        totalPage,
         route: "/tickets",
       });
     } catch (error) {
