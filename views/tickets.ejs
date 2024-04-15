@@ -58,16 +58,26 @@
     </form>
   </div>
 
+  <% const columns = { ticket_status: 'Status', type: 'Type', code: 'Code',
+  batch_generate: 'Batch Generate', date_generate: 'Date Generate', date_used:
+  'Date Used', date_refund: 'Date Refund', } %>
+
   <table class="table table-striped">
     <thead>
       <tr>
         <th>No</th>
-        <th class="text-center">Status</th>
-        <th class="text-center">Code</th>
-        <th class="text-center">Batch Generate</th>
-        <th class="text-center">Date Generate</th>
-        <th class="text-center">Date Used</th>
-        <th class="text-center">Date Refund</th>
+        <% for (let col in columns) { %>
+        <th class="text-center">
+          <% if (query.sort_column == col && query.sort_order == 'asc') { %>
+          &darr; <% } %> <% if (query.sort_column == col && query.sort_order ==
+          'desc') { %> &uarr; <% } %>
+          <a
+            href="?sort_column=<%= col %>&sort_order=<%= query.sort_column == col && query.sort_order == 'asc' ? 'desc' : 'asc' %>"
+          >
+            <%= columns[col] %>
+          </a>
+        </th>
+        <% } %>
       </tr>
     </thead>
     <tbody>
@@ -80,6 +90,7 @@
             <%= el.ticket_status.toUpperCase() %>
           </span>
         </td>
+        <td class="text-center"><%= el.type || 'customer' %></td>
         <td class="text-center">
           <a
             class="ticket-link text-decoration-none"
