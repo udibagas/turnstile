@@ -65,21 +65,21 @@ module.exports = (sequelize, DataTypes) => {
         if (gate.socketClient) {
           gate.socketClient.write(Buffer.from(`\xa6MT00001\xA9`));
         }
-        throw new Error(`INVALID TICKET: ${code}`);
+        throw new Error(`${gate.name} - INVALID TICKET: ${code}`);
       }
 
       if (ticket.ticket_status == "used") {
         if (gate.socketClient) {
           gate.socketClient.write(Buffer.from(`\xa6MT00002\xA9`));
         }
-        throw new Error(`TICKET HAS BEEN USED: ${code}`);
+        throw new Error(`${gate.name} - TICKET HAS BEEN USED: ${code}`);
       }
 
       if (ticket.ticket_status == "refund") {
         if (gate.socketClient) {
           gate.socketClient.write(Buffer.from(`\xa6MT00001\xA9`));
         }
-        throw new Error(`TICKET HAS BEEN REFUND: ${code}`);
+        throw new Error(`${gate.name} - TICKET HAS BEEN REFUND: ${code}`);
       }
 
       console.log(`${gate.name} - OK - ${code}`);
