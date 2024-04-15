@@ -38,11 +38,11 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       this.socketClient.on("data", async (bufferData) => {
-        const data = bufferData.toString().slice(1, -1);
+        const data = bufferData.toString().slice(1, -1); // remove header and footer
         // console.log(`${name}: ${data}`);
         const prefix = data.slice(0, 2);
         if (!["PT", "QT"].includes(prefix)) return;
-        const code = data.slice(2);
+        let code = data.slice(2, 38); // take 36 characters only
         try {
           await sequelize.models.Ticket.checkIn(code, this);
         } catch (error) {
