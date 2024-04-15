@@ -104,13 +104,26 @@ module.exports = (sequelize, DataTypes) => {
 
     static async fetch() {
       console.log(`Fetching tickets...`);
-      const res = await fetch(`${process.env.API_URL}/ticket`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
+      let lastBatch = null;
+
+      const lastTicket = await this.findOne({
+        order: [["batch_generate", "desc"]],
       });
+
+      if (lastTicket) {
+        lastBatch = lastTicket.batch_generate;
+      }
+
+      const res = await fetch(
+        `${process.env.API_URL}/ticket?batch=${lastBatch}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      );
 
       const data = await res.json();
       console.log(`Got ${data.length} tickets`);

@@ -7,7 +7,7 @@ const cookieMiddleware = require("./middlewares/cookie.middleware");
 const app = express();
 const port = 3000;
 
-cron.schedule("*/10 * * * *", Ticket.fetch);
+cron.schedule("*/20 * * * *", Ticket.fetch);
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
