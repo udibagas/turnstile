@@ -72,7 +72,8 @@
           &darr; <% } %> <% if (query.sort_column == col && query.sort_order ==
           'desc') { %> &uarr; <% } %>
           <a
-            href="?sort_column=<%= col %>&sort_order=<%= query.sort_column == col && query.sort_order == 'asc' ? 'desc' : 'asc' %>"
+            class="text-decoration-none"
+            href="?sort_column=<%= col %>&sort_order=<%= query.sort_column == col && query.sort_order == 'asc' ? 'desc' : 'asc' %>&status=<%= query.status %>"
           >
             <%= columns[col] %>
           </a>
