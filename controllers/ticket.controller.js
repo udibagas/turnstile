@@ -3,10 +3,21 @@ const QRCode = require("qrcode");
 
 module.exports = {
   async index(req, res, next) {
-    const { search, status: ticket_status, page = 1 } = req.query;
+    const {
+      search,
+      status: ticket_status,
+      page = 1,
+      sort_column: column = "code",
+      sort_order: order = "asc",
+    } = req.query;
 
     try {
-      const data = await Ticket.paginate(page, 15, { search, ticket_status });
+      const data = await Ticket.paginate(
+        page,
+        15,
+        { search, ticket_status },
+        { column, order }
+      );
       if (req.get("content-type") == "application/json") {
         return res.json(data);
       }

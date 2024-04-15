@@ -24,13 +24,19 @@ module.exports = (sequelize, DataTypes) => {
         });
     }
 
-    static async paginate(page = 1, pageSize = 15, filter) {
+    static async paginate(
+      page = 1,
+      pageSize = 15,
+      filter,
+      sort = { column: "code", order: "asc" }
+    ) {
       const { search, ticket_status } = filter;
 
       const options = {
         limit: pageSize,
         offset: (page - 1) * pageSize,
         where: {},
+        order: [[sort.column, sort.order]],
       };
 
       if (search) {
@@ -78,14 +84,16 @@ module.exports = (sequelize, DataTypes) => {
 
       console.log(`${gate.name} - OK - ${code}`);
 
-      // update status local on local database
-      await ticket.update({
-        ticket_status: "used",
-        date_used: new Date(),
-        gate_id: gate.id,
-      });
+      // update status local on local database kalau bukan ticket admin
+      if (ticket.type != "admin") {
+        await ticket.update({
+          ticket_status: "used",
+          date_used: new Date(),
+          gate_id: gate.id,
+        });
 
-      ticket.updateToCloud();
+        ticket.updateToCloud();
+      }
 
       // open gate
       if (gate.socketClient) {
@@ -171,6 +179,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       gate_id: DataTypes.STRING,
+      type: DataTypes.STRING,
     },
     {
       sequelize,
