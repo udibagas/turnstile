@@ -102,21 +102,9 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
 
-    static async fetch() {
-      console.log(`Fetching tickets...`);
-      let lastBatch = null;
-
-      const lastTicket = await this.findOne({
-        order: [["batch_generate", "desc"]],
-      });
-
-      if (lastTicket) {
-        lastBatch = lastTicket.batch_generate;
-      }
-
-      let mappedData = [];
-
-      fetch(`${process.env.API_URL}/ticket?batch=${lastBatch}`, {
+    static fetch(page = 1) {
+      console.log(`Fetching ticket page ${page}...`);
+      fetch(`${process.env.API_URL}/ticket?page=${page}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -125,32 +113,29 @@ module.exports = (sequelize, DataTypes) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(`Got ${data.length} tickets`);
-          mappedData = data.map((el) => {
-            el.date_generate = new Date();
-            delete el.id;
-            delete el.deleted_at;
-            return el;
+          const { data: rows, current_page, next_page_url } = data;
+          console.log(`Got ${rows.length} tickets`);
+          rows.forEach((row, i) => {
+            return Ticket.findOrCreate({
+              where: { code: row.code },
+              defaults: {
+                batch_generate: row.batch_generate,
+                ticket_status: row.ticket_status,
+                date_generate: row.created_at,
+                created_at: row.created_at,
+                updated_at: row.updated_at,
+              },
+            })
+              .then((ticket) => {
+                console.log(`Page ${page} row ${i} - ${ticket[0].code}`);
+              })
+              .catch((err) => {
+                console.log(err.message);
+              });
           });
 
-          return Ticket.findAll({
-            where: { ticket_status: "ready" },
-          });
-        })
-        .then((existingReadyTickets) => {
-          if (existingReadyTickets.length == 0) {
-            Ticket.bulkCreate(mappedData);
-          } else {
-            const filteredData = mappedData.filter((el) => {
-              return !existingReadyTickets.map((t) => t.code).includes(el.code);
-            });
-
-            if (filteredData.length > 0) {
-              console.log(`Got ${filteredData.length} new tickets`);
-              Ticket.bulkCreate(filteredData);
-            } else {
-              console.log(`No new ticket`);
-            }
+          if (next_page_url) {
+            Ticket.fetch(current_page + 1);
           }
         })
         .catch((err) => {
