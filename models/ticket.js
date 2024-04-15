@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
         limit: pageSize,
         offset: (page - 1) * pageSize,
         where: {},
-        order: [[sort.column, sort.order]],
+        order: [[sort.column || "code", sort.order || "asc"]],
       };
 
       if (search) {

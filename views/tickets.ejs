@@ -116,7 +116,7 @@
         <li class="page-item <%= query.page == 1 ? 'disabled' : '' %>">
           <a
             class="page-link"
-            href="/tickets?page=<%= +query.page - 1  %>&status=<%= query.status %>&search=<%= query.search %>"
+            href="/tickets?page=<%= +query.page - 1  %>&status=<%= query.status %>&search=<%= query.search %>&sort_column=<%= query.sort_column %>&sort_order=<%= query.sort_order %>"
             >&laquo; Prev</a
           >
         </li>
@@ -138,7 +138,7 @@
         >
           <a
             class="page-link"
-            href="/tickets?page=<%= +query.page + 1  %>&status=<%= query.status %>&search=<%= query.search %>"
+            href="/tickets?page=<%= +query.page + 1  %>&status=<%= query.status %>&search=<%= query.search %>&sort_column=<%= query.sort_column %>&sort_order=<%= query.sort_order %>"
           >
             Next &raquo;</a
           >
