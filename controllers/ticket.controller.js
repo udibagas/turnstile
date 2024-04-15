@@ -7,6 +7,10 @@ module.exports = {
 
     try {
       const data = await Ticket.paginate(page, 15, { search, ticket_status });
+      if (req.get("content-type") == "application/json") {
+        return res.json(data);
+      }
+
       res.render("layout", {
         view: "tickets",
         data,
