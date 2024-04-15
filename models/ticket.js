@@ -56,14 +56,23 @@ module.exports = (sequelize, DataTypes) => {
       const ticket = await this.findByCode(code);
 
       if (!ticket) {
+        if (gate.socketClient) {
+          gate.socketClient.write(Buffer.from(`\xa6MT00001\xA9`));
+        }
         throw new Error(`INVALID TICKET: ${code}`);
       }
 
       if (ticket.ticket_status == "used") {
+        if (gate.socketClient) {
+          gate.socketClient.write(Buffer.from(`\xa6MT00002\xA9`));
+        }
         throw new Error(`TICKET HAS BEEN USED: ${code}`);
       }
 
       if (ticket.ticket_status == "refund") {
+        if (gate.socketClient) {
+          gate.socketClient.write(Buffer.from(`\xa6MT00001\xA9`));
+        }
         throw new Error(`TICKET HAS BEEN REFUND: ${code}`);
       }
 
@@ -80,6 +89,7 @@ module.exports = (sequelize, DataTypes) => {
 
       // open gate
       if (gate.socketClient) {
+        gate.socketClient.write(Buffer.from(`\xa6MT00003\xA9`));
         gate.socketClient.write(Buffer.from(`\xA6TRIG1\xA9`));
       }
     }
