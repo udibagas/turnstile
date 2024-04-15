@@ -140,6 +140,7 @@ module.exports = (sequelize, DataTypes) => {
         })
         .catch((err) => {
           console.log(err.message);
+          Ticket.fetch(page);
         });
     }
   }
