@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container-fluid">
   <div class="d-flex justify-content-between align-items-center">
     <h1 class="my-3">Tickets</h1>
 
@@ -60,7 +60,7 @@
 
   <% const columns = { ticket_status: 'Status', type: 'Type', code: 'Code',
   batch_generate: 'Batch Generate', date_generate: 'Date Generate', date_used:
-  'Date Used', scan_count: 'Scan Count' } %>
+  'Date Used', date_refund: 'Date Refund', scan_count: 'Scan Count' } %>
 
   <table class="table table-striped">
     <thead>
@@ -104,6 +104,7 @@
         <td class="text-center"><%= el.batch_generate %></td>
         <td class="text-center"><%= el.date_generate %></td>
         <td class="text-center"><%= el.date_used %></td>
+        <td class="text-center"><%= el.date_refund %></td>
         <td class="text-center"><%= el.scan_count %></td>
       </tr>
       <% }) %>
