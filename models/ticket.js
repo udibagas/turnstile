@@ -86,16 +86,22 @@ module.exports = (sequelize, DataTypes) => {
 
       // update status local on local database kalau bukan ticket admin
       if (ticket.type != "admin") {
-        await ticket.update({
-          ticket_status: "used",
-          date_used: new Date(),
-          gate_id: gate.id,
-        });
-
+        ticket.ticket_status = "used";
         ticket.updateToCloud();
       }
 
-      await ticket.increment("scan_count");
+      // delay 3 seconds if admin
+      if (ticket.type == "admin") {
+        const now = new Date();
+        if ((now - ticket.dataValues.date_used) / 1000 < 3) {
+          return;
+        }
+      }
+
+      ticket.date_used = new Date();
+      ticket.gate_id = gate.id;
+      ticket.scan_count += 1;
+      await ticket.save();
 
       // open gate
       if (gate.socketClient) {
