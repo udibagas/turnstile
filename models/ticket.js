@@ -95,6 +95,8 @@ module.exports = (sequelize, DataTypes) => {
         ticket.updateToCloud();
       }
 
+      await ticket.increment("scan_count");
+
       // open gate
       if (gate.socketClient) {
         gate.socketClient.write(Buffer.from(`\xa6MT00003\xA9`));
@@ -182,6 +184,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       gate_id: DataTypes.STRING,
       type: DataTypes.STRING,
+      scan_count: DataTypes.INTEGER,
     },
     {
       sequelize,
